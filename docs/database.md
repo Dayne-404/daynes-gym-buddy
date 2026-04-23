@@ -34,8 +34,6 @@
 - id (PK)
 - name
 - muscle_group
-- description
-- instructions
 - media_url
 - created_at
 
