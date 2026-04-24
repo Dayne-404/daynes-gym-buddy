@@ -5,7 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
   output   = "../src/generated/prisma"
 }
 
@@ -15,5 +15,85 @@ datasource db {
 }
 
 model User {
-  id             Int       @id @default(autoincrement())
+  id               Int      @id @default(autoincrement())
+  email            String   @unique
+  passwordHash     String
+  firstName        String
+  lastName         String
+  avatarColor      String
+  goalWeightLb     Float?
+  dailyCalorieGoal Int?
+  tokenVersion     Int      @default(0)
+  createdAt        DateTime @default(now())
+
+  calories      Calorie[]
+  routines      Routine[]
+  weights       Weight[]
+  refreshTokens RefreshToken[]
+}
+
+model Routine {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+
+  user             User              @relation(fields: [userId], references: [id])
+  routineExercises RoutineExercise[]
+}
+
+model Calorie {
+  id                  Int      @id @default(autoincrement())
+  userId              Int
+  date                DateTime
+  calories            Int
+  calorieGoalSnapShot Int?
+  createdAt           DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Weight {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  date      DateTime
+  weightLb  Float
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model RoutineExercise {
+  id         Int      @id @default(autoincrement())
+  routineId  Int
+  exerciseId Int
+  orderIndex Int
+  targetSets Int
+  targetReps Int
+  createdAt  DateTime @default(now())
+
+  routine  Routine  @relation(fields: [routineId], references: [id])
+  exercise Exercise @relation(fields: [exerciseId], references: [id])
+}
+
+model Exercise {
+  id          Int      @id @default(autoincrement())
+  name        String
+  muscleGroup String
+  description String?
+  mediaUrl    String?
+  createdAt   DateTime @default(now())
+
+  routineExercises RoutineExercise[]
+}
+
+model RefreshToken {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  tokenHash String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
 }

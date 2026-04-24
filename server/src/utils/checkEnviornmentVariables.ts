@@ -1,4 +1,4 @@
-const requiredEnvVars = ["ACCESS_TOKEN_SECRET", "REFRESH_TOKEN_SECRET"];
+const requiredEnvVars = ["ACCESS_TOKEN_SECRET", "REFRESH_TOKEN_SECRET", "NODE_ENV"];
 
 const optionalEnvVars = ["CLIENT_URL", "PORT"];
 
