@@ -109,7 +109,6 @@ export const login = async (req: Request, res: Response) => {
   res.status(201).json(accessToken);
 };
 
-
 //TODO: Maybe change 204 to 200 message
 export const logout = async (req: Request, res: Response) => {
   console.log("Logging out user");

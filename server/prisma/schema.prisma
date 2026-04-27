@@ -46,7 +46,7 @@ model Routine {
 model Calorie {
   id                  Int      @id @default(autoincrement())
   userId              Int
-  date                DateTime
+  date                DateTime @default(now())
   calories            Int
   calorieGoalSnapShot Int?
   createdAt           DateTime @default(now())
