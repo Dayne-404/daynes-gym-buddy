@@ -1,5 +1,6 @@
 import { Router } from "express";
 import * as authController from '../controllers/auth.controller'
+import { requireAuth } from "../middleware/authHandler";
 
 const router = Router();
 
@@ -8,6 +9,6 @@ router.post("/login", authController.login);
 router.post("/logout", authController.logout);
 router.post('/refresh', authController.refresh);
 
-router.get('/me', authController.me);
+router.get('/me', requireAuth, authController.me);
 
 export default router;
