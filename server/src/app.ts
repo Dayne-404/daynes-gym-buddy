@@ -4,12 +4,13 @@ import { notFound } from "./middleware/notFound";
 import { errorHandler } from "./middleware/errorHandler";
 import routes from "./routes/index.routes";
 import cookieParser from "cookie-parser";
+import { env } from "node:process";
 
 const app: Application = express();
 
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    origin: env.CLIENT_URL,
     credentials: true,
   }),
 );

@@ -1,19 +1,7 @@
 import jwt, { Secret, SignOptions } from "jsonwebtoken";
 import { prisma } from "../config/prisma";
 import argon2 from "argon2";
-
-const ACCESS_TOKEN_SECRET: Secret = process.env.ACCESS_TOKEN_SECRET as Secret;
-const REFRESH_TOKEN_SECRET: Secret = process.env.REFRESH_TOKEN_SECRET as Secret;
-
-if (!ACCESS_TOKEN_SECRET) {
-  console.error("Missing ACCESS_TOKEN_SECRET in environment variables");
-  process.exit(1);
-}
-
-if (!REFRESH_TOKEN_SECRET) {
-  console.error("Missing REFRESH_TOKEN_SECRET in environment variables");
-  process.exit(1);
-}
+import { env } from "../config/env";
 
 export interface AccessTokenPayload {
   userId: number;
@@ -45,7 +33,11 @@ export const generateAccessToken = (
     tokenVersion,
   };
 
-  return signToken(payload, ACCESS_TOKEN_SECRET, "10m");
+  return signToken(
+    payload,
+    env.accessTokenSecret,
+    `${env.accessTokenExpiresMinutes}m`,
+  );
 };
 
 export const generateRefreshToken = async (
@@ -57,14 +49,20 @@ export const generateRefreshToken = async (
     tokenVersion,
   };
 
-  const token = signToken(payload, REFRESH_TOKEN_SECRET, "7d");
+  const token = signToken(
+    payload,
+    env.refreshTokenSecret,
+    `${env.refreshTokenExpiresDays}d`,
+  );
   const hashedToken = await argon2.hash(token);
 
   await prisma.refreshToken.create({
     data: {
       userId,
       tokenHash: hashedToken,
-      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
+      expiresAt: new Date(
+        Date.now() + env.refreshTokenExpiresDays * 24 * 60 * 60 * 1000,
+      ), 
     },
   });
 
@@ -72,9 +70,9 @@ export const generateRefreshToken = async (
 };
 
 export const validateAccessToken = (token: string): AccessTokenPayload => {
-  return jwt.verify(token, ACCESS_TOKEN_SECRET) as AccessTokenPayload;
+  return jwt.verify(token, env.accessTokenSecret) as AccessTokenPayload;
 };
 
 export const validateRefreshToken = (token: string): RefreshTokenPayload => {
-  return jwt.verify(token, REFRESH_TOKEN_SECRET) as RefreshTokenPayload;
+  return jwt.verify(token, env.refreshTokenSecret) as RefreshTokenPayload;
 };

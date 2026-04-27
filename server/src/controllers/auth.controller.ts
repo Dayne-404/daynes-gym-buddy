@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import argon2 from "argon2";
 import ApiError from "../utils/ApiError";
 import { prisma } from "../config/prisma";
+import { env } from "../config/env";
 import {
   generateAccessToken,
   generateRefreshToken,
@@ -11,17 +12,17 @@ import {
 const clearRefreshCookie = (res: Response) => {
   res.clearCookie("refreshToken", {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
+    secure: env.cookies.secure,
+    sameSite: env.cookies.sameSite,
   });
 };
 
 const createRefreshCookie = (res: Response, token: string) => {
   res.cookie("refreshToken", token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    secure: env.cookies.secure,
+    sameSite: env.cookies.sameSite,
+    maxAge: env.refreshTokenExpiresDays * 24 * 60 * 60 * 1000,
   });
 };
 
