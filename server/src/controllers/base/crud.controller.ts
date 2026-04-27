@@ -3,6 +3,7 @@ import { prisma } from "../../config/prisma";
 import { PrismaModelName, userOwnedModel } from "../../types/prismaModels";
 import ApiError from "../../utils/ApiError";
 import { coerceBody } from "../../utils/coerceBody";
+import { get } from "node:http";
 
 const sanitizeData = (data: any, fieldType: PrismaModelName) => {
   const sanitized = { ...data };
@@ -23,7 +24,7 @@ export const createCrudControllers = (modelName: PrismaModelName) => {
 
     const data = await (model as any).findMany({ where });
 
-    res.json(data);
+    res.json({ [`${modelName}s`]: data });
   };
 
   const getById = async (req: Request, res: Response) => {
@@ -41,7 +42,7 @@ export const createCrudControllers = (modelName: PrismaModelName) => {
       throw new ApiError(404, "Resource not found");
     }
 
-    res.json({ data });
+    res.status(200).json({ [modelName]: data });
   };
 
   const create = async (req: Request, res: Response) => {
@@ -51,7 +52,7 @@ export const createCrudControllers = (modelName: PrismaModelName) => {
 
     const created = await (model as any).create({ data });
 
-    res.status(201).json({ data: created });
+    res.status(201).json({ [modelName]: created });
   };
 
   const update = async (req: Request, res: Response) => {
@@ -73,7 +74,7 @@ export const createCrudControllers = (modelName: PrismaModelName) => {
       data: editingData,
     });
 
-    res.json({ data: updated });
+    res.status(201).json({ [modelName]: updated });
   };
 
   const remove = async (req: Request, res: Response) => {
@@ -93,7 +94,7 @@ export const createCrudControllers = (modelName: PrismaModelName) => {
       where: { id },
     });
 
-    res.json({ data: removed });
+    res.status(200).json({ [modelName]: removed });
   };
 
   return {

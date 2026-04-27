@@ -57,7 +57,7 @@ model Calorie {
 model Weight {
   id        Int      @id @default(autoincrement())
   userId    Int
-  date      DateTime
+  date      DateTime @default(now())
   weightLb  Float
   createdAt DateTime @default(now())
 
