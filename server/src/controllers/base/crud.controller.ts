@@ -1,9 +1,13 @@
 import { Request, Response } from "express";
 import { prisma } from "../../config/prisma";
-import { PrismaModelName, userOwnedModel } from "../../types/prismaModels";
+import {
+  hasDateField,
+  PrismaModelName,
+  userOwnedModel,
+} from "../../types/prismaModels";
 import ApiError from "../../utils/ApiError";
 import { coerceBody } from "../../utils/coerceBody";
-import { get } from "node:http";
+import { buildDateFilter } from "../../utils/dateFilter";
 
 const sanitizeData = (data: any, fieldType: PrismaModelName) => {
   const sanitized = { ...data };
@@ -20,7 +24,21 @@ export const createCrudControllers = (modelName: PrismaModelName) => {
   const isUserOwned = userOwnedModel.has(modelName);
 
   const getAll = async (req: Request, res: Response) => {
-    const where = isUserOwned ? { userId: req.userId! } : {};
+    const createdAtFilter = buildDateFilter(
+      req.query,
+      "createdFrom",
+      "createdTo",
+    );
+    
+    const date = hasDateField.has(modelName)
+      ? buildDateFilter(req.query)
+      : undefined;
+
+    const where: any = {
+      ...(isUserOwned && { userId: req.userId! }),
+      ...(createdAtFilter && { createdAt: createdAtFilter }),
+      ...(date && { date }),
+    };
 
     const data = await (model as any).findMany({ where });
 

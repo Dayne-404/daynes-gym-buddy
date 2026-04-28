@@ -17,3 +17,5 @@ export const userOwnedModel = new Set<PrismaModelName>([
   "weight",
   "routineExercise",
 ]);
+
+export const hasDateField = new Set<PrismaModelName>(["calorie", "weight"]);
