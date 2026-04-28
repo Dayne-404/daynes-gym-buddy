@@ -6,10 +6,12 @@ import http from "http";
 import { validateEnv } from "./config/validateEnv";
 import { env } from "process";
 import { prisma } from "./config/prisma";
+import { checkDatabaseConnection } from "./config/checkDatabase";
 
-const startServer = () => {
+const startServer = async () => {
   try {
     validateEnv();
+    await checkDatabaseConnection();
 
     const PORT = env.PORT;
     const server = http.createServer(app);

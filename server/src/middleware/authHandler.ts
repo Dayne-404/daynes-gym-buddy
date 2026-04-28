@@ -1,6 +1,6 @@
 import { Response, NextFunction, Request } from "express";
 import ApiError from "../utils/ApiError";
-import { verifyAccessToken } from "../utils/generateToken";
+import { validateAccessToken } from "../services/token.service";
 import { prisma } from "../config/prisma";
 
 /**
@@ -31,7 +31,7 @@ export const requireAuth = async (
     let payload;
 
     try {
-      payload = verifyAccessToken(token);
+      payload = validateAccessToken(token);
     } catch {
       throw ApiError.unauthorized("Invalid or expired token");
     }
