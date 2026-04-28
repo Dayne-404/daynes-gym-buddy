@@ -6,6 +6,9 @@ import { env } from "../config/env";
 export interface AccessTokenPayload {
   userId: number;
   email: string;
+  firstName: string;
+  lastName: string;
+  avatarColor: string;
   tokenVersion: number;
 }
 
@@ -25,11 +28,17 @@ const signToken = (
 export const generateAccessToken = (
   userId: number,
   email: string,
+  firstName: string,
+  lastName: string,
+  avatarColor: string,
   tokenVersion: number,
 ): string => {
   const payload: AccessTokenPayload = {
     userId,
     email,
+    firstName,
+    lastName,
+    avatarColor,
     tokenVersion,
   };
 

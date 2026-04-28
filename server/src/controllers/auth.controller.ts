@@ -62,6 +62,9 @@ export const register = async (req: Request, res: Response) => {
   const accessToken = generateAccessToken(
     newUser.id,
     newUser.email,
+    newUser.firstName,
+    newUser.lastName,
+    newUser.avatarColor,
     newUser.tokenVersion,
   );
 
@@ -101,6 +104,9 @@ export const login = async (req: Request, res: Response) => {
   const accessToken = generateAccessToken(
     user.id,
     user.email,
+    user.firstName,
+    user.lastName,
+    user.avatarColor,
     user.tokenVersion,
   );
   const refreshToken = await generateRefreshToken(user.id, user.tokenVersion);
@@ -240,6 +246,9 @@ export const refresh = async (req: Request, res: Response) => {
   const newAccessToken = generateAccessToken(
     user.id,
     user.email,
+    user.firstName,
+    user.lastName,
+    user.avatarColor,
     user.tokenVersion,
   );
 
