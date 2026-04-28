@@ -19,17 +19,24 @@ const sanitizeData = (data: any, fieldType: PrismaModelName) => {
   return coerceBody(fieldType, sanitized);
 };
 
+/**
+ * Generic CRUD controller factory
+ * Generates standardized CRUD handlers for Prisma models
+ */
 export const createCrudControllers = (modelName: PrismaModelName) => {
-  const model = prisma[modelName];
+  const model = prisma[modelName] as any;
   const isUserOwned = userOwnedModel.has(modelName);
 
+  /**
+   * GET ALL
+   */
   const getAll = async (req: Request, res: Response) => {
     const createdAtFilter = buildDateFilter(
       req.query,
       "createdFrom",
       "createdTo",
     );
-    
+
     const date = hasDateField.has(modelName)
       ? buildDateFilter(req.query)
       : undefined;
@@ -45,11 +52,18 @@ export const createCrudControllers = (modelName: PrismaModelName) => {
     res.json({ [`${modelName}s`]: data });
   };
 
+  /**
+   * GET BY ID
+   */
   const getById = async (req: Request, res: Response) => {
     const id = Number(req.params.id);
 
+    if (Number.isNaN(id)) {
+      throw ApiError.badRequest("Invalid ID parameter");
+    }
+
     if (!id) {
-      throw new ApiError(400, "Invalid ID parameter must be a number");
+      throw ApiError.badRequest("Invalid ID parameter must be a number");
     }
 
     const where = isUserOwned ? { id, userId: req.userId! } : { id };
@@ -57,12 +71,15 @@ export const createCrudControllers = (modelName: PrismaModelName) => {
     const data = await (model as any).findUnique({ where });
 
     if (!data) {
-      throw new ApiError(404, "Resource not found");
+      throw ApiError.notFound(modelName);
     }
 
     res.status(200).json({ [modelName]: data });
   };
 
+  /**
+   * CREATE
+   */
   const create = async (req: Request, res: Response) => {
     const data = isUserOwned
       ? { ...sanitizeData(req.body, modelName), userId: req.userId! }
@@ -73,9 +90,16 @@ export const createCrudControllers = (modelName: PrismaModelName) => {
     res.status(201).json({ [modelName]: created });
   };
 
+  /**
+   * UPDATE
+   */
   const update = async (req: Request, res: Response) => {
     const id = Number(req.params.id);
     const editingData = sanitizeData(req.body, modelName);
+
+    if (Number.isNaN(id)) {
+      throw ApiError.badRequest("Invalid ID parameter");
+    }
 
     if (isUserOwned) {
       const existing = await (model as any).findFirst({
@@ -83,7 +107,7 @@ export const createCrudControllers = (modelName: PrismaModelName) => {
       });
 
       if (!existing) {
-        return res.status(404).json({ error: "Resource not found" });
+        throw ApiError.notFound(modelName);
       }
     }
 
@@ -95,8 +119,15 @@ export const createCrudControllers = (modelName: PrismaModelName) => {
     res.status(201).json({ [modelName]: updated });
   };
 
+  /**
+   * DELETE
+   */
   const remove = async (req: Request, res: Response) => {
     const id = Number(req.params.id);
+
+    if (Number.isNaN(id)) {
+      throw ApiError.badRequest("Invalid ID parameter");
+    }
 
     if (isUserOwned) {
       const existing = await (model as any).findFirst({
@@ -104,7 +135,7 @@ export const createCrudControllers = (modelName: PrismaModelName) => {
       });
 
       if (!existing) {
-        return res.status(404).json({ error: "Resource not found" });
+        throw ApiError.notFound(modelName);
       }
     }
 

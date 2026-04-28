@@ -1,7 +1,12 @@
 import { PrismaModelName } from "../types/prismaModels";
 
+// Supported primitive coercions from HTTP -> Prisma
 type FieldType = "number" | "date" | "boolean";
 
+/**
+ * Map of Prisma models -> fields that require type coercion.
+ * Only fields listed here will be transformed.
+ */
 type ModelCoercionMap = Record<string, Record<string, FieldType>>;
 
 export const modelCoercionMap: ModelCoercionMap = {
@@ -26,14 +31,20 @@ export const modelCoercionMap: ModelCoercionMap = {
   },
 };
 
-export const coerceBody = (modelName: PrismaModelName, body: any) => {
+/**
+ * Coerces incoming request body values into correct primitive types
+ * based on Prisma model field expectations.
+ *
+ * Prevents issues where numbers/dates arrive as strings from HTTP.
+ */
+export const coerceBody = (
+  modelName: PrismaModelName,
+  body: Record<string, unknown>,
+) => {
   const coercionMap = modelCoercionMap[modelName];
+  if (!coercionMap) return body;
 
-  if (!coercionMap) {
-    return body;
-  }
-
-  const newBody = { ...body };
+  const newBody: Record<string, unknown> = { ...body };
 
   for (const key in coercionMap) {
     if (key in newBody) {
@@ -43,7 +54,7 @@ export const coerceBody = (modelName: PrismaModelName, body: any) => {
       if (value === null || value === undefined) continue;
 
       if (fieldType === "number") newBody[key] = Number(value);
-      if (fieldType === "date") newBody[key] = new Date(value);
+      if (fieldType === "date") newBody[key] = new Date(value as string);
       if (fieldType === "boolean")
         newBody[key] = value === "true" || value === true;
     }

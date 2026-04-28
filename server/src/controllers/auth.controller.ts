@@ -6,7 +6,7 @@ import { env } from "../config/env";
 import {
   generateAccessToken,
   generateRefreshToken,
-  validateRefreshToken,
+  verifyRefreshToken,
 } from "../utils/generateToken";
 
 const clearRefreshCookie = (res: Response) => {
@@ -128,7 +128,7 @@ export const logout = async (req: Request, res: Response) => {
     return res.sendStatus(204);
   }
 
-  const payload = validateRefreshToken(token);
+  const payload = verifyRefreshToken(token);
 
   if (!payload) {
     clearRefreshCookie(res);
@@ -183,7 +183,7 @@ export const refresh = async (req: Request, res: Response) => {
   }
 
   // Step 1: Validate the refresh token and extract the payload
-  const payload = validateRefreshToken(token);
+  const payload = verifyRefreshToken(token);
 
   if (!payload) {
     clearRefreshCookie(res);

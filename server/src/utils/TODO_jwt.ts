@@ -1,7 +1,9 @@
 import jwt, { Secret, SignOptions } from "jsonwebtoken";
-import { prisma } from "../config/prisma";
-import argon2 from "argon2";
 import { env } from "../config/env";
+
+/**
+ * JWT payloads used across the application
+ */
 
 export interface AccessTokenPayload {
   userId: number;
@@ -17,6 +19,9 @@ export interface RefreshTokenPayload {
   tokenVersion: number;
 }
 
+/**
+ * Internal helper for signing JWTs
+ */
 const signToken = (
   payload: object,
   secret: Secret,
@@ -25,23 +30,12 @@ const signToken = (
   return jwt.sign(payload, secret, { expiresIn });
 };
 
+/**
+ * Generate short-lived access token (used for API auth)
+ */
 export const generateAccessToken = (
-  userId: number,
-  email: string,
-  firstName: string,
-  lastName: string,
-  avatarColor: string,
-  tokenVersion: number,
+  payload: AccessTokenPayload,
 ): string => {
-  const payload: AccessTokenPayload = {
-    userId,
-    email,
-    firstName,
-    lastName,
-    avatarColor,
-    tokenVersion,
-  };
-
   return signToken(
     payload,
     env.accessTokenSecret,
@@ -49,39 +43,30 @@ export const generateAccessToken = (
   );
 };
 
-export const generateRefreshToken = async (
-  userId: number,
-  tokenVersion: number,
-): Promise<string> => {
-  const payload: RefreshTokenPayload = {
-    userId,
-    tokenVersion,
-  };
-
-  const token = signToken(
+/**
+ * Generate long-lived refresh token (returned to client)
+ * NOTE: DB storage is handled in auth.service.ts
+ */
+export const generateRefreshToken = (
+  payload: RefreshTokenPayload,
+): string => {
+  return signToken(
     payload,
     env.refreshTokenSecret,
     `${env.refreshTokenExpiresDays}d`,
   );
-  const hashedToken = await argon2.hash(token);
-
-  await prisma.refreshToken.create({
-    data: {
-      userId,
-      tokenHash: hashedToken,
-      expiresAt: new Date(
-        Date.now() + env.refreshTokenExpiresDays * 24 * 60 * 60 * 1000,
-      ), 
-    },
-  });
-
-  return token;
 };
 
+/**
+ * Verify and decode access token
+ */
 export const verifyAccessToken = (token: string): AccessTokenPayload => {
   return jwt.verify(token, env.accessTokenSecret) as AccessTokenPayload;
 };
 
+/**
+ * Verify and decode refresh token
+ */
 export const verifyRefreshToken = (token: string): RefreshTokenPayload => {
   return jwt.verify(token, env.refreshTokenSecret) as RefreshTokenPayload;
 };

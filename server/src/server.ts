@@ -3,12 +3,13 @@ dotenv.config();
 
 import app from "./app";
 import http from "http";
-import { checkEnvironmentVariables } from "./config/checkEnv";
+import { validateEnv } from "./config/validateEnv";
 import { env } from "process";
+import { prisma } from "./config/prisma";
 
 const startServer = () => {
   try {
-    checkEnvironmentVariables();
+    validateEnv();
 
     const PORT = env.PORT;
     const server = http.createServer(app);
@@ -17,10 +18,14 @@ const startServer = () => {
       console.log(`\nServer running on port ${PORT}`);
     });
 
-    const shutdown = (signal: string) => {
+    const shutdown = async (signal: string) => {
       console.log(`\n${signal} recieved. Shutting down...`);
-      server.close(() => {
-        console.log("Server closed");
+      server.close(async () => {
+        console.log("HTTP Server closed");
+
+        await prisma.$disconnect();
+        console.log("Database disconnected");
+        
         process.exit(0);
       });
     };

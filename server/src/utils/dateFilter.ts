@@ -1,10 +1,27 @@
+/**
+ * Builds a Prisma date range filter from query parameters.
+ *
+ * Example:
+ *   /weights?from=2026-01-01&to=2026-01-31
+ *
+ * Returns:
+ *   { gte: Date, lte: Date }
+ */
+
+const parseValidDate = (value: unknown): Date | undefined => {
+  if (!value) return undefined;
+
+  const date = new Date(value as string);
+  return Number.isNaN(date.getTime()) ? undefined : date;
+};
+
 export const buildDateFilter = (
-  query: any,
+  query: Record<string, unknown>,
   fromKey = "from",
-  toKey = "to"
+  toKey = "to",
 ) => {
-  const from = query[fromKey];
-  const to = query[toKey];
+  const from = parseValidDate(query[fromKey]);
+  const to = parseValidDate(query[toKey]);
 
   if (!from && !to) return undefined;
 
