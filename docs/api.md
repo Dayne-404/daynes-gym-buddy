@@ -3,11 +3,14 @@
 | Method              | Endpoint              | Auth | Purpose                | Request                                                     | Response             | Test |
 | ------------------- | --------------------- | ---- | ---------------------- | ----------------------------------------------------------- | -------------------- | ---- |
 | **Auth**            |                       |      |                        |                                                             |                      |      |
-| GET                 | /auth/me              | Yes  | Get current user       |                                                             | {user}               | [ ]  |
 | POST                | /auth/login           | No   | Login User             | {email, password}                                           | {accessToken}        | [ ]  |
-| POST                | /auth/logout          | No   | Logout User            |                                                             | 200                  |
+| POST                | /auth/logout          | No   | Logout User            |                                                             | 200                  | [ ]  |
 | POST                | /auth/refresh         | No   | Refresh JWT            | cookie: refreshToken                                        | {accessToken}        | [ ]  |
 | POST                | /auth/register        | No   | Create User            | {email, password, firstName, lastName}                      | {accessToken, user}  | [ ]  |
+| **User**            |                       |      |                        |                                                             |                      |      |
+| GET                 | /me                   | Yes  | Get current user       |                                                             | {user}               | [ ]  |
+| PUT                 | /me                   | Yes  | Update current user    |                                                             | {user}               | [ ]  |
+| PUT                 | /me                   | Yes  | Update user password   |                                                             | {message}            | [ ]  |
 | **Calories**        |                       |      |                        |                                                             |                      |      |
 | GET                 | /calories             | Yes  | Get all calorie logs   |                                                             | {calories[]}         | [ ]  |
 | GET                 | /calories/:id         | Yes  | Get calorie log by id  |                                                             | {calorie}            | [ ]  |

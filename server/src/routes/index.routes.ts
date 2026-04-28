@@ -7,11 +7,13 @@ import routineExerciseRoutes from "./routineExercise.routes";
 import calorieRoutes from "./calorie.routes";
 import weightRoutes from "./weight.routes";
 import { requireAuth } from "../middleware/authHandler";
+import userRoutes from "./user.routes";
 
 const router = Router();
 
 // Auth + user
 router.use("/auth", authRoutes);
+router.use("/users", requireAuth, userRoutes);
 
 // Core features
 router.use("/exercises", requireAuth, exerciseRoutes);

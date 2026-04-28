@@ -245,31 +245,3 @@ export const refresh = async (req: Request, res: Response) => {
 
   res.status(200).json({ accessToken: newAccessToken });
 };
-
-//ME is done
-
-export const me = async (req: Request, res: Response) => {
-  console.log("Returning user");
-
-  const userId = req.userId;
-
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: {
-      id: true,
-      email: true,
-      firstName: true,
-      lastName: true,
-      avatarColor: true,
-      goalWeightLb: true,
-      dailyCalorieGoal: true,
-      createdAt: true,
-    },
-  });
-
-  if (!user) {
-    throw new ApiError(404, "User not found");
-  }
-
-  res.status(200).json({ user });
-};

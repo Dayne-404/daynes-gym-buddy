@@ -19,6 +19,11 @@ export const modelCoercionMap: ModelCoercionMap = {
     reps: "number",
     restTimeSeconds: "number",
   },
+  user: {
+    goalWeightLb: "number", //TODO: should this be a float?
+    dailyCalorieGoal: "number",
+    tokenVersion: "number",
+  },
 };
 
 export const coerceBody = (modelName: PrismaModelName, body: any) => {
