@@ -1,0 +1,931 @@
+{
+  "info": {
+    "_postman_id": "8ac1c7ba-0ec1-4ef9-98e9-93a5963188d6",
+    "name": "daynes_gym_buddy",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "54329677",
+    "_collection_link": "https://go.postman.co/collection/54329677-8ac1c7ba-0ec1-4ef9-98e9-93a5963188d6?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"dayne@example.com\",\n    \"password\": \"password\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/auth/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"dayne@example.com\",\n    \"password\": \"password\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/auth/logout",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "auth",
+                "logout"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/auth/refresh",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "auth",
+                "refresh"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"matt@example.com\",\n    \"password\": \"password\",\n    \"firstName\": \"Matt\",\n    \"lastName\": \"Something\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/auth/register",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Me",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImVtYWlsIjoibWF0dEBleGFtcGxlLmNvbSIsInRva2VuVmVyc2lvbiI6MCwiaWF0IjoxNzc3MjYyMDg5LCJleHAiOjE3NzcyNjI2ODl9.36BHg3CbNnyxHbr4qFcOJmlZdFrbQgAyNFBl7Yth1qQ",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/auth/me",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "auth",
+                "me"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Calories",
+      "item": [
+        {
+          "name": "Get All",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoiZGF5bmVAZXhhbXBsZS5jb20iLCJmaXJzdE5hbWUiOiJEYXluZSIsImxhc3ROYW1lIjoiRGVsbGFpcmUiLCJhdmF0YXJDb2xvciI6IiNmZjAwMDAiLCJ0b2tlblZlcnNpb24iOjEsImlhdCI6MTc3NzM1MTc5MywiZXhwIjoxNzg3NzE5NzkzfQ._kHlu02bOh7ysIjKeAvhEq8s3usv_4ZgvabUXnDj5j0",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:3000/api/calories",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "calories"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get by Id",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoiZGF5bmVAZXhhbXBsZS5jb20iLCJ0b2tlblZlcnNpb24iOjEsImlhdCI6MTc3NzMyMjcyOSwiZXhwIjoxNzc3MzIzNjI5fQ.y1eXDgiuk5iMJTrYWHe53XLAH-INNPZLxY7UTM_G4zk",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/calories/2",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "calories",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Calorie",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoiZGF5bmVAZXhhbXBsZS5jb20iLCJ0b2tlblZlcnNpb24iOjEsImlhdCI6MTc3NzM0MjgzNiwiZXhwIjoxNzg3NzEwODM2fQ.5dLoPagbqiSrZhLu-QZ0njB5uRZsJ-nLXK0cN95paHM",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"id\": \"5\",\n    \"userId\": \"yourmom\",\n    \"calories\": \"1200\",\n    \"date\": \"2025-01-01\",\n    \"calorieGoalSnapShot\": \"2000\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/calories",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "calories"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Calorie",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoiZGF5bmVAZXhhbXBsZS5jb20iLCJ0b2tlblZlcnNpb24iOjEsImlhdCI6MTc3NzMyMjcyOSwiZXhwIjoxNzc3MzIzNjI5fQ.y1eXDgiuk5iMJTrYWHe53XLAH-INNPZLxY7UTM_G4zk",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"id\": \"5\",\n    \"userId\": \"yourmom\",\n    \"calories\": \"1800\",\n    \"calorieGoalSnapShot\": \"4000\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/calories/5",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "calories",
+                "5"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Calorie",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoiZGF5bmVAZXhhbXBsZS5jb20iLCJ0b2tlblZlcnNpb24iOjEsImlhdCI6MTc3NzMyMjcyOSwiZXhwIjoxNzc3MzIzNjI5fQ.y1eXDgiuk5iMJTrYWHe53XLAH-INNPZLxY7UTM_G4zk",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"id\": \"5\",\n    \"userId\": \"yourmom\",\n    \"calories\": \"1800\",\n    \"calorieGoalSnapShot\": \"4000\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/calories/5",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "calories",
+                "5"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Exercises",
+      "item": [
+        {
+          "name": "Get All",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoiZGF5bmVAZXhhbXBsZS5jb20iLCJ0b2tlblZlcnNpb24iOjEsImlhdCI6MTc3NzMyMjcyOSwiZXhwIjoxNzc3MzIzNjI5fQ.y1eXDgiuk5iMJTrYWHe53XLAH-INNPZLxY7UTM_G4zk",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/exercises",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "exercises"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get by Id",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoiZGF5bmVAZXhhbXBsZS5jb20iLCJ0b2tlblZlcnNpb24iOjEsImlhdCI6MTc3NzMyMjcyOSwiZXhwIjoxNzc3MzIzNjI5fQ.y1eXDgiuk5iMJTrYWHe53XLAH-INNPZLxY7UTM_G4zk",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Test\",\n    \"muscleGroup\": \"Back\",\n    \"description\": \"This is a test\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/exercises/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "exercises",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Exercise",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoiZGF5bmVAZXhhbXBsZS5jb20iLCJ0b2tlblZlcnNpb24iOjEsImlhdCI6MTc3NzMyMjcyOSwiZXhwIjoxNzc3MzIzNjI5fQ.y1eXDgiuk5iMJTrYWHe53XLAH-INNPZLxY7UTM_G4zk",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Test\",\n    \"muscleGroup\": \"Back\",\n    \"description\": \"This is a test\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/exercises",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "exercises"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Exercise",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoiZGF5bmVAZXhhbXBsZS5jb20iLCJ0b2tlblZlcnNpb24iOjEsImlhdCI6MTc3NzMyMjcyOSwiZXhwIjoxNzc3MzIzNjI5fQ.y1eXDgiuk5iMJTrYWHe53XLAH-INNPZLxY7UTM_G4zk",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"id\": \"3\",\n    \"userId\": \"yourmom\",\n    \"name\": \"Test U\",\n    \"description\": \"mamamamam\",\n    \"mediaUrl\": \"mamama\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/exercises/4",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "exercises",
+                "4"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Calorie",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoiZGF5bmVAZXhhbXBsZS5jb20iLCJ0b2tlblZlcnNpb24iOjEsImlhdCI6MTc3NzMyMjcyOSwiZXhwIjoxNzc3MzIzNjI5fQ.y1eXDgiuk5iMJTrYWHe53XLAH-INNPZLxY7UTM_G4zk",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"id\": \"5\",\n    \"userId\": \"yourmom\",\n    \"calories\": \"1800\",\n    \"calorieGoalSnapShot\": \"4000\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/exercises/4",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "exercises",
+                "4"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Routine",
+      "item": [
+        {
+          "name": "Get All",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoiZGF5bmVAZXhhbXBsZS5jb20iLCJ0b2tlblZlcnNpb24iOjEsImlhdCI6MTc3NzM0MjgzNiwiZXhwIjoxNzg3NzEwODM2fQ.5dLoPagbqiSrZhLu-QZ0njB5uRZsJ-nLXK0cN95paHM",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/routines?createdFrom=2026-01-01",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "routines"
+              ],
+              "query": [
+                {
+                  "key": "createdFrom",
+                  "value": "2026-01-01"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get by Id",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoiZGF5bmVAZXhhbXBsZS5jb20iLCJ0b2tlblZlcnNpb24iOjEsImlhdCI6MTc3NzMyMjcyOSwiZXhwIjoxNzc3MzIzNjI5fQ.y1eXDgiuk5iMJTrYWHe53XLAH-INNPZLxY7UTM_G4zk",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/routines/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "routines",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Routine",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoiZGF5bmVAZXhhbXBsZS5jb20iLCJ0b2tlblZlcnNpb24iOjEsImlhdCI6MTc3NzMyMjcyOSwiZXhwIjoxNzc3MzIzNjI5fQ.y1eXDgiuk5iMJTrYWHe53XLAH-INNPZLxY7UTM_G4zk",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Pull your mom day\",\n    \"description\": \"hahaha\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/routines",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "routines"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Routine",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoiZGF5bmVAZXhhbXBsZS5jb20iLCJ0b2tlblZlcnNpb24iOjEsImlhdCI6MTc3NzMyMjcyOSwiZXhwIjoxNzc3MzIzNjI5fQ.y1eXDgiuk5iMJTrYWHe53XLAH-INNPZLxY7UTM_G4zk",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Test U\",\n    \"description\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/routines/2",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "routines",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Calorie",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoiZGF5bmVAZXhhbXBsZS5jb20iLCJ0b2tlblZlcnNpb24iOjEsImlhdCI6MTc3NzMyMjcyOSwiZXhwIjoxNzc3MzIzNjI5fQ.y1eXDgiuk5iMJTrYWHe53XLAH-INNPZLxY7UTM_G4zk",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"id\": \"5\",\n    \"userId\": \"yourmom\",\n    \"calories\": \"1800\",\n    \"calorieGoalSnapShot\": \"4000\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/routines/3",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "routines",
+                "3"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Weight",
+      "item": [
+        {
+          "name": "Get All",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoiZGF5bmVAZXhhbXBsZS5jb20iLCJ0b2tlblZlcnNpb24iOjEsImlhdCI6MTc3NzMzNzY5NCwiZXhwIjoxNzg3NzA1Njk0fQ.xagC-HduoMHvvnBqEjvvz7B1UO8MIZf8_LiQ7K6W3Jk",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/weights",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "weights"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get by Id",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoiZGF5bmVAZXhhbXBsZS5jb20iLCJ0b2tlblZlcnNpb24iOjEsImlhdCI6MTc3NzMzNzY5NCwiZXhwIjoxNzg3NzA1Njk0fQ.xagC-HduoMHvvnBqEjvvz7B1UO8MIZf8_LiQ7K6W3Jk",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/weights/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "weights",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Weight",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoiZGF5bmVAZXhhbXBsZS5jb20iLCJ0b2tlblZlcnNpb24iOjEsImlhdCI6MTc3NzMzNzY5NCwiZXhwIjoxNzg3NzA1Njk0fQ.xagC-HduoMHvvnBqEjvvz7B1UO8MIZf8_LiQ7K6W3Jk",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"weightLb\": 1200 \n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/weights",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "weights"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Routine",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoiZGF5bmVAZXhhbXBsZS5jb20iLCJ0b2tlblZlcnNpb24iOjEsImlhdCI6MTc3NzMzNzY5NCwiZXhwIjoxNzg3NzA1Njk0fQ.xagC-HduoMHvvnBqEjvvz7B1UO8MIZf8_LiQ7K6W3Jk",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"weightLb\": 1500\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/weights/4",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "weights",
+                "4"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Calorie",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoiZGF5bmVAZXhhbXBsZS5jb20iLCJ0b2tlblZlcnNpb24iOjEsImlhdCI6MTc3NzMzNzY5NCwiZXhwIjoxNzg3NzA1Njk0fQ.xagC-HduoMHvvnBqEjvvz7B1UO8MIZf8_LiQ7K6W3Jk",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"id\": \"5\",\n    \"userId\": \"yourmom\",\n    \"calories\": \"1800\",\n    \"calorieGoalSnapShot\": \"4000\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/weights/4",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "weights",
+                "4"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
