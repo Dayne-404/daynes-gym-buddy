@@ -25,3 +25,11 @@ export const getUserRefreshTokens = (userId: number) => {
 export const deleteRefreshTokenById = (id: number) => {
   return prisma.refreshToken.delete({ where: { id } });
 };
+
+export const deleteRefreshTokenByHash = async (tokenHash: string) => {
+  await prisma.refreshToken.deleteMany({
+    where: {
+      tokenHash: tokenHash,
+    },
+  });
+};

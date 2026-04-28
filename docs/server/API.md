@@ -3,7 +3,7 @@
 | Method              | Endpoint              | Auth | Purpose                | Request                                                     | Response             | Test |
 | ------------------- | --------------------- | ---- | ---------------------- | ----------------------------------------------------------- | -------------------- | ---- |
 | **Auth**            |                       |      |                        |                                                             |                      |      |
-| POST                | /auth/login           | No   | Login User             | {email, password}                                           | {accessToken}        | [ ]  |
+| POST                | /auth/login           | No   | Login User             | {email, password}                                           | {accessToken}        | [x]  |
 | POST                | /auth/logout          | No   | Logout User            |                                                             | 200                  | [ ]  |
 | POST                | /auth/refresh         | No   | Refresh JWT            | cookie: refreshToken                                        | {accessToken}        | [ ]  |
 | POST                | /auth/register        | No   | Create User            | {email, password, firstName, lastName}                      | {accessToken, user}  | [ ]  |

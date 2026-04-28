@@ -16,7 +16,7 @@ export const registerUser = async (
   lastName: string,
 ) => {
   const existingUser = await repo.findUserByEmail(email);
-  if (existingUser) throw new ApiError(400, "Email is already in use");
+  if (existingUser) throw ApiError.badRequest("Email is already in use");
 
   const passwordHash = await argon2.hash(password);
   const avatarColor = colors[Math.floor(Math.random() * colors.length)];
@@ -45,10 +45,10 @@ export const registerUser = async (
 
 export const loginUser = async (email: string, password: string) => {
   const user = await repo.findUserByEmail(email);
-  if (!user) throw new ApiError(401, "Incorrect email or password");
+  if (!user) throw ApiError.unauthorized("Incorrect email or password");
 
   const valid = await argon2.verify(user.passwordHash, password);
-  if (!valid) throw new ApiError(401, "Incorrect email or password");
+  if (!valid) throw ApiError.unauthorized("Incorrect email or password");
 
   const accessToken = generateAccessToken(
     user.id,
@@ -66,7 +66,7 @@ export const loginUser = async (email: string, password: string) => {
 
 export const refreshUserSession = async (token: string) => {
   const payload = validateRefreshToken(token);
-  if (!payload) throw new ApiError(401, "Invalid refresh token");
+  if (!payload) throw ApiError.unauthorized("Invalid refresh token");
 
   const { userId, tokenVersion } = payload;
 
@@ -82,13 +82,13 @@ export const refreshUserSession = async (token: string) => {
     }
   }
 
-  if (!matchedToken) throw new ApiError(401, "Refresh token not found");
+  if (!matchedToken) throw ApiError.unauthorized("Refresh token not found");
   if (matchedToken.expiresAt < new Date())
-    throw new ApiError(401, "Refresh token expired");
+    throw ApiError.unauthorized("Refresh token expired");
 
   const user = await repo.findUserById(userId);
   if (!user || user.tokenVersion !== tokenVersion)
-    throw new ApiError(401, "Session invalidated");
+    throw ApiError.unauthorized("Session invalidated");
 
   await repo.deleteRefreshTokenById(matchedToken.id);
 
@@ -107,4 +107,21 @@ export const refreshUserSession = async (token: string) => {
   );
 
   return { newAccessToken, newRefreshToken };
+};
+
+export const logoutUser = async (token: string) => {
+  const payload = validateRefreshToken(token);
+  if (!payload) return;
+
+  const { userId } = payload;
+
+  const tokens = await repo.getUserRefreshTokens(userId);
+
+  for (const dbToken of tokens) {
+    const match = await argon2.verify(dbToken.tokenHash, token);
+    if (match) {
+      await repo.deleteRefreshTokenById(dbToken.id);
+      break;
+    }
+  }
 };

@@ -4,8 +4,8 @@ import { requireAuth } from "../middleware/authHandler";
 
 const router = Router();
 
-router.get("/", requireAuth, userControllers.getUser);
-router.put("/", requireAuth, userControllers.updateUser);
+router.get("/me", requireAuth, userControllers.getUser);
+router.put("/me", requireAuth, userControllers.updateUser);
 router.put("/password", requireAuth, userControllers.updatePassword);
 
 export default router;
