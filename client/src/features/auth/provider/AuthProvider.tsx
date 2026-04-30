@@ -1,11 +1,13 @@
 import {
   useCallback,
+  useEffect,
   useLayoutEffect,
   useRef,
   useState,
   type ReactNode,
 } from "react";
-import { apiRequest } from "../../../services/apiClient";
+
+import { apiRequest, setAuthHandlers } from "../../../services/apiClient";
 import { jwtDecode } from "jwt-decode";
 import { useUser } from "@/features/user";
 import { AuthContext } from "@/features/auth";
@@ -106,6 +108,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const data = await apiRequest<{ accessToken: string }>({
           endpoint: "/auth/refresh",
           method: "POST",
+          skipAuthRefresh: true,
         });
 
         applyAuthData(data);
@@ -120,12 +123,38 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     restoreAccessToken();
   }, [applyAuthData, logout]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
+    setAuthHandlers({
+      refreshAccessToken: async () => {
+        try {
+          const data = await apiRequest<{ accessToken: string }>({
+            method: "POST",
+            endpoint: "/auth/refresh",
+          });
+
+          applyAuthData(data);
+          return data.accessToken;
+        } catch {
+          return null;
+        }
+      },
+
+      getAccessToken: () => {
+        return accessToken;
+      },
+
+      forceLogout: () => {
+        logout();
+      },
+    });
+  }, [applyAuthData, accessToken, logout]);
+
+  useEffect(() => {
     const updateState = () => {
-        setIsAuthenticated(!!accessToken);
-    }
-    
-    updateState()
+      setIsAuthenticated(!!accessToken);
+    };
+
+    updateState();
   }, [accessToken]);
 
   return (

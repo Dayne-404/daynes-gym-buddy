@@ -65,13 +65,13 @@ export const errorHandler = (
     console.error("\nERROR");
     console.error("Status:", status);
     console.error("Message:", error.message);
-    console.error("Stack:", error.stack);
-    console.error("Path:", req.originalUrl);
+    //console.error("Stack:", error.stack);
+    //console.error("Path:", req.originalUrl);
     console.error("Method:", req.method);
     console.error("Body:", req.body);
-    console.error("Query:", req.query);
-    console.error("Params:", req.params);
-    console.error("END ERROR\n");
+    //console.error("Query:", req.query);
+    //console.error("Params:", req.params);
+    //console.error("END ERROR\n");
   }
 
   return res.status(status).json({

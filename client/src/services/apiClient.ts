@@ -4,37 +4,60 @@ interface ApiRequestOptions {
   endpoint: string;
   method?: string;
   body?: string;
-  accessToken?: string | null;
-  onUnauthorized?: () => void;
+  skipAuthRefresh?: boolean;
 }
+
+let refreshAccessToken: (() => Promise<string | null>) | null = null;
+let getAccessToken: (() => string | null) | null = null;
+let forceLogout: (() => void) | null = null;
+
+export const setAuthHandlers = (handlers: {
+  refreshAccessToken: () => Promise<string | null>;
+  getAccessToken: () => string | null;
+  forceLogout: () => void;
+}) => {
+  refreshAccessToken = handlers.refreshAccessToken;
+  getAccessToken = handlers.getAccessToken;
+  forceLogout = handlers.forceLogout;
+};
 
 export async function apiRequest<T>({
   endpoint,
   method = "GET",
   body,
-  accessToken,
-  onUnauthorized,
+  skipAuthRefresh = false,
 }: ApiRequestOptions): Promise<T> {
   const url = `${API_BASE_URL}${endpoint}`;
 
-  const headers: Record<string, string> = {
-    "Content-Type": "application/json",
+  const makeRequest = async (token?: string | null) => {
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
+    return fetch(url, {
+      method,
+      headers,
+      body,
+      credentials: "include",
+    });
   };
 
-  if (accessToken) {
-    headers.Authorization = `Bearer ${accessToken}`;
-  }
+  const token = getAccessToken?.() ?? null;
+  let res = await makeRequest(token);
 
-  const res = await fetch(url, {
-    method,
-    headers,
-    body,
-    credentials: "include",
-  });
+  if (!skipAuthRefresh && (res.status === 401 || res.status === 403)) {
+    const newToken = await refreshAccessToken?.();
 
-  if (res.status === 401 || res.status === 403) {
-    onUnauthorized?.();
-    throw new Error("Unauthorized");
+    if (!newToken) {
+      forceLogout?.();
+      throw new Error("Session expired");
+    }
+
+    res = await makeRequest(newToken);
   }
 
   if (!res.ok) {
