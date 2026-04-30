@@ -7,8 +7,8 @@ import {
 } from "react";
 import { apiRequest } from "../../../services/apiClient";
 import { jwtDecode } from "jwt-decode";
-import { useUser } from "../context/UserContext";
-import { AuthContext } from "../../auth/context/AuthContext";
+import { useUser } from "@/features/user";
+import { AuthContext } from "@/features/auth";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [accessToken, setAccessToken] = useState<string | null>(null);

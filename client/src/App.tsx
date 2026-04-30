@@ -1,12 +1,12 @@
-import { UserProvider } from "./features/auth/provider/UserProvider";
-import { AuthProvider } from "./features/user/provider/AuthProvider";
-import { Login } from "./components/Login";
+import { UserProvider } from "./features/user";
+import { LoginPage, AuthProvider } from "./features/auth";
+
 
 export default function App() {
   return (
     <UserProvider>
       <AuthProvider>
-        <Login />
+        <LoginPage />
       </AuthProvider>
     </UserProvider>
   );

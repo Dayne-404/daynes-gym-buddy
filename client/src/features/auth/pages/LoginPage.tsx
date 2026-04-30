@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { useAuth } from "../features/auth/context/AuthContext";
-import { useUser } from "../features/user/context/UserContext";
+import { useAuth } from '@/features/auth';
+import { useUser } from "@/features/user";
 
-export const Login = () => {
+export const LoginPage = () => {
   const [email, setEmail] = useState("dayne@example.com");
   const [password, setPassword] = useState("password");
   const auth = useAuth();
