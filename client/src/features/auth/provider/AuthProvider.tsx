@@ -15,11 +15,12 @@ import { AuthContext } from "@/features/auth";
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [authInitializing, setAuthInitializing] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [loginError, setLoginError] = useState<string>("");
   const { setUser } = useUser();
   const hasTriedRefresh = useRef(false);
+
+  const isAuthenticated = !!accessToken;
 
   const isValidUserPayload = (payload: User): boolean => {
     return (
@@ -94,7 +95,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     setAccessToken(null);
     setUser(null);
-    setIsAuthenticated(false);
     return true;
   }, [setUser]);
 
@@ -148,14 +148,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       },
     });
   }, [applyAuthData, accessToken, logout]);
-
-  useEffect(() => {
-    const updateState = () => {
-      setIsAuthenticated(!!accessToken);
-    };
-
-    updateState();
-  }, [accessToken]);
 
   return (
     <AuthContext.Provider
