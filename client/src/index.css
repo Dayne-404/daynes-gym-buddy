@@ -1,1 +1,86 @@
 @import "tailwindcss";
+
+@theme {
+  --font-sans: Poppins, ui-sans-serif, system-ui, sans-serif;
+
+  --color-primary: oklch(70% 0.14 255);
+  --color-primary-foreground: white;
+
+  --color-secondary: oklch(75% 0.16 310);
+  --color-secondary-foreground: white;
+
+  --color-background: oklch(100% 0 0);
+  --color-foreground: oklch(20% 0.02 25);
+
+  --color-surface: oklch(100% 0 0);
+  --color-muted: oklch(96% 0.01 255);
+  --color-border: #f7f8f8;
+
+  --color-gray-100: #7b6f72;
+  --color-gray-500: #ada4a5;
+  --color-gray-700: #dddada;
+}
+:root {
+  --gradient-brand: linear-gradient(45deg, #92a3fd 0%, #9dceff 100%);
+  --gradient-secondary: linear-gradient(45deg, #c58bf2 0%, #eea4ce 100%);
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}
+
+@layer utilities {
+  .page {
+    margin: 40px 30px 0 30px;
+  }
+  .text-h1 {
+    font-size: 26px;
+    line-height: 39px;
+  }
+  .text-h2 {
+    font-size: 24px;
+    line-height: 36px;
+  }
+  .text-h3 {
+    font-size: 22px;
+    line-height: 33px;
+  }
+  .text-h4 {
+    font-size: 20px;
+    line-height: 30px;
+  }
+  .text-subtitle {
+    font-size: 18px;
+    line-height: 27px;
+  }
+  .text-large {
+    font-size: 16px;
+    line-height: 24px;
+  }
+  .text-medium {
+    font-size: 14px;
+    line-height: 21px;
+  }
+  .text-small {
+    font-size: 12px;
+    line-height: 18px;
+  }
+  .text-caption {
+    font-size: 10px;
+    line-height: 15px;
+  }
+
+  .bg-gradient-brand {
+    background: var(--gradient-brand);
+  }
+
+  .bg-gradient-secondary {
+    background: var(--gradient-secondary);
+  }
+
+  .shadow-primary {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  }
+}
