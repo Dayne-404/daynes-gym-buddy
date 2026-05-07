@@ -4,6 +4,7 @@ interface AuthContextType {
   accessToken: string | null;
   setAccessToken: (token: string | null) => void;
   login: (email: string, password: string) => Promise<boolean>;
+  register: (form: {firstName: string, lastName: string, email: string, password: string}) => Promise<boolean>;
   logout: () => Promise<boolean>;
   loginError: string;
   loading: boolean;

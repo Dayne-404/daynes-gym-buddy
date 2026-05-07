@@ -4,14 +4,10 @@ interface LineProps {
 
 const Line = ({ middleText }: LineProps) => {
   return (
-    <div className="flex items-center h-12 w-full">
-      <hr className="text-gray-700 w-full" />
-      {middleText && (
-        <>
-          <h6 className="px-2 text-small">{middleText}</h6>
-          <hr className="text-gray-700 w-full" />
-        </>
-      )}
+    <div className="flex items-center w-full">
+      <hr className="flex-1 border-gray-700" />
+      {middleText && <span className="px-2 text-small">{middleText}</span>}
+      <hr className="flex-1 border-gray-700" />
     </div>
   );
 };

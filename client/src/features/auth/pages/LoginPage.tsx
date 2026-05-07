@@ -1,100 +1,72 @@
 import { useState } from "react";
-import { useAuth } from "@/features/auth";
-import { useUser } from "@/features/user";
-import { apiRequest } from "@/services/apiClient";
-
-const emptyUser: User = {
-  userId: "",
-  firstName: "",
-  lastName: "",
-  avatarColor: "",
-  email: "",
-};
+import PageContainer from "@/app/layouts/PageContainer";
+import Section from "@/app/layouts/Section";
+import Stack from "@/app/layouts/Stack";
+import Card from "@/app/layouts/Card";
+import Input from "@/components/Input";
+import { Lock, Show, Hide, Message } from "react-iconly";
+import Button from "../../../components/Button";
+import Line from "@/components/Line";
+import Redirect from "../components/Redirect";
 
 export const LoginPage = () => {
-  const [email, setEmail] = useState("dayne@example.com");
-  const [password, setPassword] = useState("password");
-  const [reqUser, setReqUser] = useState<User>(emptyUser);
-  const auth = useAuth();
-  const user = useUser();
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    auth.login(email, password);
-  };
-
-  const getUserData = async () => {
-    const req = await apiRequest<User>({
-      endpoint: "/users/me",
-    });
-
-    if (req) {
-      setReqUser(req as User);
-    }
-  };
-
+  const [email, setEmail] = useState<string>("dayne@example.com");
+  const [password, setPassword] = useState<string>("password");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+ 
   return (
-    <div>
-      <form onSubmit={handleSubmit} style={{ maxWidth: 400 }}>
-        <h2>Login</h2>
+    <PageContainer variant="centered">
+      <Card>
+        <Stack gap={8}>
+          {/* Header */}
+          <Section className="text-center">
+            <p>Hey, there</p>
+            <h4 className="text-h4 font-bold">Welcome Back</h4>
+          </Section>
 
-        <div>
-          <label>Email</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
+          {/* Form */}
+          <Stack gap={4}>
+            <Input
+              key={"login-email"}
+              name="email"
+              placeholder="Email"
+              type="email"
+              value={email}
+              icon={Message}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setEmail(e.target.value)
+              }
+            />
+            <Input
+              key={"login-password"}
+              name="password"
+              placeholder="Password"
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setPassword(e.target.value)
+              }
+              icon={Lock}
+              endIcon={showPassword ? Show : Hide}
+              onEndIconClick={() => setShowPassword((v) => !v)}
+            />
+            <a className="text-gray-700 underline text-center" href="#">
+              Forgot your password?
+            </a>
+          </Stack>
 
-        <div>
-          <label>Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-
-        {/* Error message */}
-        {auth.loginError && <p style={{ color: "red" }}>{auth.loginError}</p>}
-
-        {/* Submit */}
-        <button type="submit" disabled={auth.loading}>
-          {auth.loading ? "Logging in..." : "Login"}
-        </button>
-        <div style={{ padding: "0.5rem" }}>
-          <h1>User</h1>
-          <p>{user.user?.userId}</p>
-          <p>{user.user?.email}</p>
-          <p>{user.user?.firstName}</p>
-          <p>{user.user?.lastName}</p>
-          <p>{user.user?.avatarColor}</p>
-        </div>
-      </form>
-      <div>
-        <button style={{ display: "block" }} onClick={getUserData}>
-          Get user
-        </button>
-        <button
-          style={{ display: "block" }}
-          onClick={() => {
-            setReqUser(emptyUser);
-          }}
-        >
-          Empty user
-        </button>
-      </div>
-      <div style={{ padding: "0.5rem" }}>
-        <h1>User</h1>
-        <p>{reqUser.userId}</p>
-        <p>{reqUser.email}</p>
-        <p>{reqUser.firstName}</p>
-        <p>{reqUser.lastName}</p>
-        <p>{reqUser.avatarColor}</p>
-      </div>
-    </div>
+          {/* Submit Button */}
+          <Stack gap={4}>
+            <Button text="Login" />
+            <Line middleText="Or"/>
+            <Redirect
+              text="Don't have an account yet?"
+              linkText="Register"
+              to="/register"
+            />
+          </Stack>
+        </Stack>
+      </Card>
+    </PageContainer>
   );
 };

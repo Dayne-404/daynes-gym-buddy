@@ -9,6 +9,12 @@ export interface AccessTokenPayload {
   lastName: string;
   avatarColor: string;
   tokenVersion: number;
+  profileComplete: boolean;
+}
+
+export interface profileCompleteFields {
+  goalWeightLb: number | null,
+  dailyCalorieGoal: number | null,
 }
 
 /**

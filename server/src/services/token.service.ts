@@ -15,6 +15,7 @@ export const generateAccessToken = (
   lastName: string,
   avatarColor: string,
   tokenVersion: number,
+  profileComplete: boolean,
 ): string => {
   const payload: AccessTokenPayload = {
     userId,
@@ -23,6 +24,7 @@ export const generateAccessToken = (
     lastName,
     avatarColor,
     tokenVersion,
+    profileComplete,
   };
 
   return signToken(

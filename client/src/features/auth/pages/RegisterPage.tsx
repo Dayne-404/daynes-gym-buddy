@@ -1,11 +1,16 @@
 import { useState, type FC } from "react";
-import FormInput from "../components/FormInput";
-import PageContainer from "@/components/PageContainer";
+import Input from "../../../components/Input";
+import PageContainer from "@/app/layouts/PageContainer";
 import { Lock, Message, User, Show, Hide, type IconProps } from "react-iconly";
-import { Checkbox } from "../components/Checkbox";
-import SubmitButton from "../components/SubmitButton";
+import { Checkbox } from "../../../components/Checkbox";
+import Button from "../../../components/Button";
 import Line from "@/components/Line";
-import LoginRedirect from "../components/LoginRedirect";
+import Card from "@/app/layouts/Card";
+import Stack from "@/app/layouts/Stack";
+import Section from "@/app/layouts/Section";
+import Redirect from "../components/Redirect";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 interface RegisterForm {
   firstName: string;
@@ -36,6 +41,8 @@ const RegisterPage = () => {
   const [form, setForm] = useState<RegisterForm>(emptyForm);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [checked, setChecked] = useState<boolean>(false);
+  const navigate = useNavigate();
+  const auth = useAuth();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -46,46 +53,79 @@ const RegisterPage = () => {
     }));
   };
 
+  const handleOnRegister = async () => {
+    //TODO: FormValidation
+    try {
+      const loggedIn = await auth.register(form);
+
+      if (!loggedIn) {
+        throw new Error("Error logging in");
+      }
+
+      console.log("Successfully auth");
+
+      navigate("/register/profile", { replace: true });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
-    <PageContainer>
-      <div className="text-center pb-8">
-        <p>Hey, there</p>
-        <h4 className="text-h4 font-bold">Create an account</h4>
-      </div>
-      
-      <div className="w-full max-w-md mx-auto space-y-4 pb-50">
-        {formFields.map((field) => (
-          <FormInput
-            key={field.name}
-            name={field.name}
-            placeholder={field.placeholder}
-            type={field.type}
-            value={form[field.name]}
-            onChange={handleChange}
-            icon={field.icon}
-          />
-        ))}
-        <FormInput
-          name="password"
-          placeholder="Password"
-          type={showPassword ? "text" : "password"}
-          value={form.password}
-          onChange={handleChange}
-          icon={Lock}
-          endIcon={showPassword ? Show : Hide}
-          onEndIconClick={() => setShowPassword((v) => !v)}
-        />
-        <Checkbox
-          checked={checked}
-          setChecked={setChecked}
-          label="By continuing you accept our Privacy Policy and Terms of Use"
-        />
-      </div>
-      <div className="w-full max-w-md mx-auto">
-        <SubmitButton />
-        <Line middleText="Or"/>
-        <LoginRedirect />
-      </div>
+    <PageContainer variant="centered">
+      <Card>
+        <Stack gap={8}>
+          <Section className="text-center">
+            <p>Hey, there</p>
+            <h4 className="text-h4 font-bold">Create an account</h4>
+          </Section>
+
+          <Stack gap={4}>
+            {formFields.map((field) => (
+              <Input
+                key={field.name}
+                {...field}
+                value={form[field.name]}
+                onChange={handleChange}
+                disabled={auth.loading}
+              />
+            ))}
+
+            <Input
+              name="password"
+              placeholder="Password"
+              type={showPassword ? "text" : "password"}
+              value={form.password}
+              onChange={handleChange}
+              icon={Lock}
+              endIcon={showPassword ? Show : Hide}
+              onEndIconClick={() => setShowPassword((v) => !v)}
+              disabled={auth.loading}
+            />
+
+            <Checkbox
+              checked={checked}
+              setChecked={setChecked}
+              label="By continuing you accept our Privacy Policy and Terms of Use"
+              disabled={auth.loading}
+            />
+          </Stack>
+
+          <Stack gap={4}>
+            <Button
+              text="Register"
+              onClick={handleOnRegister}
+              disabled={auth.loading}
+            />
+            <Line middleText="Or" />
+            <Redirect
+              text="Already have an account?"
+              linkText="Login"
+              to="/login"
+              disabled={auth.loading}
+            />
+          </Stack>
+        </Stack>
+      </Card>
     </PageContainer>
   );
 };

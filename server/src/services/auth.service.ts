@@ -6,6 +6,7 @@ import {
   generateRefreshToken,
   validateRefreshToken,
 } from "./token.service";
+import checkProfileComplete from "../utils/checkProfileComplete";
 
 const colors = ["red", "blue", "green", "purple", "orange", "pink"];
 
@@ -36,6 +37,7 @@ export const registerUser = async (
     user.lastName,
     user.avatarColor,
     user.tokenVersion,
+    false,
   );
 
   const refreshToken = await generateRefreshToken(user.id, user.tokenVersion);
@@ -57,6 +59,10 @@ export const loginUser = async (email: string, password: string) => {
     user.lastName,
     user.avatarColor,
     user.tokenVersion,
+    checkProfileComplete({
+      goalWeightLb: user.goalWeightLb,
+      dailyCalorieGoal: user.dailyCalorieGoal,
+    }),
   );
 
   const refreshToken = await generateRefreshToken(user.id, user.tokenVersion);
@@ -104,6 +110,10 @@ export const refreshUserSession = async (token: string) => {
     user.lastName,
     user.avatarColor,
     user.tokenVersion,
+    checkProfileComplete({
+      goalWeightLb: user.goalWeightLb,
+      dailyCalorieGoal: user.dailyCalorieGoal,
+    }),
   );
 
   return { newAccessToken, newRefreshToken };

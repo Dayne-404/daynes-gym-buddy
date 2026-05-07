@@ -52,6 +52,39 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     [setUser],
   );
 
+  const register = async (form: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+  }): Promise<boolean> => {
+    console.log("Registering...");
+    setLoading(true);
+    setLoginError("");
+
+    try {
+      const data = await apiRequest<{ accessToken: string }>({
+        method: "POST",
+        endpoint: "/auth/register",
+        body: JSON.stringify(form),
+      });
+
+      applyAuthData(data);
+      return true;
+    } catch (error) {
+      console.error("Register failed:", error);
+      setAccessToken(null);
+      setUser(null);
+
+      const errorMsg = error instanceof Error ? error.message : String(error);
+      setLoginError(errorMsg);
+
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const login = async (email: string, password: string): Promise<boolean> => {
     console.log("Logging in...");
     setLoading(true);
@@ -158,6 +191,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         loginError,
         logout,
         loading,
+        register,
         isAuthenticated,
         authInitializing,
       }}

@@ -10,9 +10,10 @@ interface FormInputProps {
   placeholder: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  disabled?: boolean;
 }
 
-const FormInput = ({
+const Input = ({
   icon: Icon,
   endIcon: EndIcon,
   onEndIconClick,
@@ -21,6 +22,7 @@ const FormInput = ({
   placeholder,
   value,
   onChange,
+  disabled = false,
 }: FormInputProps) => {
   return (
     <div className="flex items-center w-full h-12 rounded-2xl px-4 bg-border border border-transparent transition-all duration-200 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/30">
@@ -37,12 +39,14 @@ const FormInput = ({
         value={value}
         onChange={onChange}
         required
+        disabled={disabled}
       />
       {EndIcon && (
         <button
           type="button"
           onClick={onEndIconClick}
           className="text-gray-100 hover:text-primary ml-4"
+          disabled={disabled}
         >
           <EndIcon set="light" primaryColor="currentColor" size={20} />
         </button>
@@ -51,4 +55,4 @@ const FormInput = ({
   );
 };
 
-export default FormInput;
+export default Input;

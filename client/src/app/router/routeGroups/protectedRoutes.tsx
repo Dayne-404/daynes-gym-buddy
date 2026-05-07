@@ -3,5 +3,7 @@ import { ProtectedRoute } from "../guards/ProtectedRoute";
 
 export const protectedRoutes: RouteObject = {
   element: <ProtectedRoute />,
-  children: [{ path: "/", element: <h1>Dashboard Page</h1> }],
+  children: [
+    { path: "/", element: <h1>Dashboard Page</h1> },
+  ],
 };

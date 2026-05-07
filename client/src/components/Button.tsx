@@ -1,7 +1,19 @@
-const SubmitButton = () => {
+interface ButtonProps {
+  text: string;
+  onClick?: () => void;
+  disabled?: boolean;
+}
+
+const Button = ({
+  text,
+  disabled = false,
+  onClick = () => {},
+}: ButtonProps) => {
   return (
     <button
       type="submit"
+      onClick={onClick}
+      disabled={disabled}
       className="
         w-full h-15
         rounded-2xl
@@ -16,9 +28,9 @@ const SubmitButton = () => {
         focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/30
       "
     >
-      Register
+      {text}
     </button>
   );
 };
 
-export default SubmitButton;
+export default Button;
