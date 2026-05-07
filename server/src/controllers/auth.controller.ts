@@ -1,13 +1,12 @@
 import { Request, Response } from "express";
 import * as authService from "../services/auth.service";
 import { createRefreshCookie, clearRefreshCookie } from "../utils/cookie";
-import { validateRefreshToken } from "../services/token.service";
 import ApiError from "../utils/ApiError";
 
 export const register = async (req: Request, res: Response) => {
   const { email, password, firstName, lastName } = req.body;
 
-  const { user, accessToken, refreshToken } = await authService.registerUser(
+  const { user, accessToken, refreshToken, } = await authService.registerUser(
     email,
     password,
     firstName,
@@ -21,13 +20,13 @@ export const register = async (req: Request, res: Response) => {
 export const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
-  const { accessToken, refreshToken } = await authService.loginUser(
+  const { accessToken, refreshToken, user } = await authService.loginUser(
     email,
     password,
   );
 
   createRefreshCookie(res, refreshToken);
-  res.status(200).json({ accessToken });
+  res.status(200).json({ accessToken, user });
 };
 
 export const refresh = async (req: Request, res: Response) => {
@@ -35,11 +34,11 @@ export const refresh = async (req: Request, res: Response) => {
 
   if (!token) throw ApiError.unauthorized("Refresh token must be provided");
 
-  const { newAccessToken, newRefreshToken } =
+  const { newAccessToken, newRefreshToken, user } =
     await authService.refreshUserSession(token);
 
   createRefreshCookie(res, newRefreshToken);
-  res.status(200).json({ accessToken: newAccessToken });
+  res.status(200).json({ accessToken: newAccessToken, user });
 };
 
 export const logout = async (req: Request, res: Response) => {

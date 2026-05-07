@@ -6,7 +6,7 @@ import {
   generateRefreshToken,
   validateRefreshToken,
 } from "./token.service";
-import checkProfileComplete from "../utils/checkProfileComplete";
+import { toPublicUser } from "../types/auth.types";
 
 const colors = ["red", "blue", "green", "purple", "orange", "pink"];
 
@@ -33,16 +33,12 @@ export const registerUser = async (
   const accessToken = generateAccessToken(
     user.id,
     user.email,
-    user.firstName,
-    user.lastName,
-    user.avatarColor,
     user.tokenVersion,
-    false,
   );
 
   const refreshToken = await generateRefreshToken(user.id, user.tokenVersion);
 
-  return { user, accessToken, refreshToken };
+  return { user: toPublicUser(user), accessToken, refreshToken };
 };
 
 export const loginUser = async (email: string, password: string) => {
@@ -55,19 +51,12 @@ export const loginUser = async (email: string, password: string) => {
   const accessToken = generateAccessToken(
     user.id,
     user.email,
-    user.firstName,
-    user.lastName,
-    user.avatarColor,
     user.tokenVersion,
-    checkProfileComplete({
-      goalWeightLb: user.goalWeightLb,
-      dailyCalorieGoal: user.dailyCalorieGoal,
-    }),
   );
 
   const refreshToken = await generateRefreshToken(user.id, user.tokenVersion);
 
-  return { accessToken, refreshToken };
+  return { user: toPublicUser(user), accessToken, refreshToken };
 };
 
 export const refreshUserSession = async (token: string) => {
@@ -106,17 +95,10 @@ export const refreshUserSession = async (token: string) => {
   const newAccessToken = generateAccessToken(
     user.id,
     user.email,
-    user.firstName,
-    user.lastName,
-    user.avatarColor,
     user.tokenVersion,
-    checkProfileComplete({
-      goalWeightLb: user.goalWeightLb,
-      dailyCalorieGoal: user.dailyCalorieGoal,
-    }),
   );
 
-  return { newAccessToken, newRefreshToken };
+  return { user: toPublicUser(user), newAccessToken, newRefreshToken };
 };
 
 export const logoutUser = async (token: string) => {

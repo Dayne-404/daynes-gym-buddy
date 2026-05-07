@@ -9,17 +9,20 @@ import {
   ArrowDownSquare,
   type IconProps,
 } from "react-iconly";
-import { type FC } from "react";
+import { useState, type FC } from "react";
 import Section from "@/app/layouts/Section";
 import Card from "@/app/layouts/Card";
 import Button from "@/components/Button";
 import heroImage from "@/assets/woman_lifting.svg";
+import { apiRequest } from "@/services/apiClient";
+import { useNavigate } from "react-router-dom";
+import { useUser } from "@/features/user";
 
 interface RegisterProfileForm {
   gender: string;
   dob: string;
   weight: string;
-  height: string;
+  dailyCalories: string;
 }
 
 const formFields: {
@@ -43,10 +46,58 @@ const formFields: {
     type: "text",
     icon: PaperPlus,
   },
-  { name: "height", placeholder: "Your Height (ft)", type: "text", icon: Swap },
+  {
+    name: "dailyCalories",
+    placeholder: "Total Daily Calories",
+    type: "text",
+    icon: Swap,
+  },
 ];
 
 const RegisterProfilePage = () => {
+  const navigate = useNavigate();
+  const user = useUser();
+
+  const [form, setForm] = useState<RegisterProfileForm>({
+    gender: "",
+    dob: "",
+    weight: "",
+    dailyCalories: "",
+  });
+
+  const handleChange = (name: keyof RegisterProfileForm, value: string) => {
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const onNext = async () => {
+    try {
+      const data = await apiRequest<{user: User}>({
+        endpoint: "/users/me",
+        method: "PUT",
+        body: JSON.stringify({
+          goalWeightLb: form.weight,
+          dailyCalorieGoal: form.dailyCalories,
+        }),
+      });
+
+      if (!data) {
+        throw new Error("Error updating profile");
+      }
+
+      console.log("Sucessfully registered");
+
+      console.log(data.user);
+      user.setUser(data.user);
+
+      navigate("/register/profile", { replace: true });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <PageContainer variant="centered">
       <Card>
@@ -63,14 +114,14 @@ const RegisterProfilePage = () => {
               name={field.name}
               placeholder={field.placeholder}
               type={field.type}
-              value={""}
-              onChange={() => {}}
+              value={form[field.name]}
+              onChange={(e) => handleChange(field.name, e.target.value)}
               icon={field.icon}
               endIcon={field.endIcon || undefined}
             />
           ))}
           <Section>
-            <Button text="Next" />
+            <Button text="Next" onClick={onNext} />
           </Section>
         </Stack>
       </Card>

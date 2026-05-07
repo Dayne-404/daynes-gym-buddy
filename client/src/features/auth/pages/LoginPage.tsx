@@ -8,12 +8,32 @@ import { Lock, Show, Hide, Message } from "react-iconly";
 import Button from "../../../components/Button";
 import Line from "@/components/Line";
 import Redirect from "../components/Redirect";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export const LoginPage = () => {
   const [email, setEmail] = useState<string>("dayne@example.com");
   const [password, setPassword] = useState<string>("password");
   const [showPassword, setShowPassword] = useState<boolean>(false);
- 
+  const auth = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogin = async () => {
+    try {
+      const loggedIn = await auth.login(email, password);
+
+      if (!loggedIn) {
+        throw new Error("Error logging in");
+      }
+
+      console.log("Successfully logged in");
+
+      navigate("/", { replace: true });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <PageContainer variant="centered">
       <Card>
@@ -36,6 +56,7 @@ export const LoginPage = () => {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setEmail(e.target.value)
               }
+              disabled={auth.loading}
             />
             <Input
               key={"login-password"}
@@ -49,6 +70,7 @@ export const LoginPage = () => {
               icon={Lock}
               endIcon={showPassword ? Show : Hide}
               onEndIconClick={() => setShowPassword((v) => !v)}
+              disabled={auth.loading}
             />
             <a className="text-gray-700 underline text-center" href="#">
               Forgot your password?
@@ -57,8 +79,8 @@ export const LoginPage = () => {
 
           {/* Submit Button */}
           <Stack gap={4}>
-            <Button text="Login" />
-            <Line middleText="Or"/>
+            <Button text="Login" onClick={handleLogin} disabled={auth.loading}/>
+            <Line middleText="Or" />
             <Redirect
               text="Don't have an account yet?"
               linkText="Register"

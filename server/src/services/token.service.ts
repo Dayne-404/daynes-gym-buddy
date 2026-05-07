@@ -11,20 +11,12 @@ import { AccessTokenPayload, RefreshTokenPayload } from "../types/auth.types";
 export const generateAccessToken = (
   userId: number,
   email: string,
-  firstName: string,
-  lastName: string,
-  avatarColor: string,
   tokenVersion: number,
-  profileComplete: boolean,
 ): string => {
   const payload: AccessTokenPayload = {
     userId,
     email,
-    firstName,
-    lastName,
-    avatarColor,
     tokenVersion,
-    profileComplete,
   };
 
   return signToken(

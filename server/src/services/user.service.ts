@@ -39,6 +39,7 @@ export const updateUserProfile = async (
   // Never allow these fields to be edited
   delete body.email;
   delete body.passwordHash;
+  //TODO: Figure out token version
 
   const sanitizedBody = coerceBody("user", body);
 

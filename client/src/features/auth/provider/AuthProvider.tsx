@@ -6,9 +6,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-
 import { apiRequest, setAuthHandlers } from "../../../services/apiClient";
-import { jwtDecode } from "jwt-decode";
 import { useUser } from "@/features/user";
 import { AuthContext } from "@/features/auth";
 
@@ -22,35 +20,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const isAuthenticated = !!accessToken;
 
-  const isValidUserPayload = (payload: User): boolean => {
-    return (
-      payload &&
-      typeof payload.userId === "number" &&
-      typeof payload.email === "string" &&
-      typeof payload.firstName === "string" &&
-      typeof payload.lastName === "string" &&
-      typeof payload.avatarColor === "string"
-    );
-  };
-
   const applyAuthData = useCallback(
-    (data: { accessToken: string | undefined }) => {
-      if (!data?.accessToken) {
-        throw new Error("Missing access token");
-      }
+  (data: { accessToken?: string; user?: User }) => {
+    if (!data?.accessToken || !data?.user) {
+      throw new Error("Missing auth response data");
+    }
 
-      const decoded = jwtDecode(data.accessToken) as User;
-
-      if (!isValidUserPayload(decoded)) {
-        console.error("Invalid token payload", decoded);
-        throw new Error("Invalid token payload");
-      }
-
-      setUser(decoded);
-      setAccessToken(data.accessToken);
-    },
-    [setUser],
-  );
+    setAccessToken(data.accessToken);
+    setUser(data.user);
+  },
+  [setUser],
+);
 
   const register = async (form: {
     firstName: string;
@@ -63,7 +43,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setLoginError("");
 
     try {
-      const data = await apiRequest<{ accessToken: string }>({
+      const data = await apiRequest<{ user: User, accessToken: string }>({
         method: "POST",
         endpoint: "/auth/register",
         body: JSON.stringify(form),
@@ -91,7 +71,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setLoginError("");
 
     try {
-      const data = await apiRequest<{ accessToken: string }>({
+      const data = await apiRequest<{ user: User, accessToken: string }>({
         method: "POST",
         endpoint: "/auth/login",
         body: JSON.stringify({ email, password }),
@@ -138,7 +118,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const restoreAccessToken = async () => {
       console.log("Restoring access token...");
       try {
-        const data = await apiRequest<{ accessToken: string }>({
+        const data = await apiRequest<{ user: User, accessToken: string }>({
           endpoint: "/auth/refresh",
           method: "POST",
           skipAuthRefresh: true,
@@ -160,7 +140,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setAuthHandlers({
       refreshAccessToken: async () => {
         try {
-          const data = await apiRequest<{ accessToken: string }>({
+          const data = await apiRequest<{ user: User, accessToken: string }>({
             method: "POST",
             endpoint: "/auth/refresh",
           });

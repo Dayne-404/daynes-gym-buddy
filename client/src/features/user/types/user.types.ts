@@ -1,10 +1,12 @@
 declare global {
   export interface User {
-    userId: string;
+    id: string;
     firstName: string;
     lastName: string;
     avatarColor: string;
     email: string;
+    goalWeightLb?: string | null;
+    dailyCalorieGoal?: string | null;
     profileComplete: boolean;
   }
 }

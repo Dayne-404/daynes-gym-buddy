@@ -4,7 +4,7 @@ import { useAuth } from "@/features/auth";
 export const PublicOnlyRoute = () => {
   const { isAuthenticated, authInitializing } = useAuth();
 
-  if (authInitializing) return <div>Loading...</div>;
+  if (authInitializing) return null;
 
   if (isAuthenticated) return <Navigate to="/" replace />;
 
