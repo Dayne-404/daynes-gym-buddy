@@ -1,7 +1,6 @@
 import { type RouteObject } from "react-router-dom";
-import { PublicOnlyRoute } from "../guards/PublicRoute";
-import { LoginPage } from "@/features/auth";
-import RegisterPage from "@/features/auth/pages/RegisterPage";
+import { PublicOnlyRoute } from "../routeGuards/PublicRoute";
+import { LoginPage, RegisterPage } from "@/features/auth";
 
 export const publicRoutes: RouteObject = {
   element: <PublicOnlyRoute />,

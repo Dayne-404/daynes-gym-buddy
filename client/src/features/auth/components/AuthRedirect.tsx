@@ -7,7 +7,7 @@ interface LoginRedirectProps {
   disabled?: boolean;
 }
 
-const Redirect = ({
+const AuthRedirect = ({
   text,
   linkText,
   to,
@@ -29,4 +29,4 @@ const Redirect = ({
   );
 };
 
-export default Redirect;
+export default AuthRedirect;

@@ -1,30 +1,12 @@
+import { Panel, Stack, Box, PageContainer } from "@/app/layout";
 import { useState, type FC } from "react";
-import Input from "../../../components/Input";
-import PageContainer from "@/app/layouts/PageContainer";
 import { Lock, Message, User, Show, Hide, type IconProps } from "react-iconly";
-import { Checkbox } from "../../../components/Checkbox";
-import Button from "../../../components/Button";
-import Line from "@/components/Line";
-import Card from "@/app/layouts/Card";
-import Stack from "@/app/layouts/Stack";
-import Section from "@/app/layouts/Section";
-import Redirect from "../components/Redirect";
+import { Button, Line, Input, Checkbox } from "@/components";
+import AuthRedirect from "../components/AuthRedirect";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-
-interface RegisterForm {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-}
-
-const emptyForm: RegisterForm = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  password: "",
-};
+import { type RegisterForm } from "../types/form.types";
+import { validateRegister } from "../services/validateFields";
 
 const formFields: {
   name: keyof RegisterForm;
@@ -38,7 +20,20 @@ const formFields: {
 ];
 
 const RegisterPage = () => {
-  const [form, setForm] = useState<RegisterForm>(emptyForm);
+  const [form, setForm] = useState<RegisterForm>({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+  });
+  const [formErrors, setFormErrors] = useState<{
+    [key in keyof RegisterForm]: string;
+  }>({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+  });
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [checked, setChecked] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -54,32 +49,48 @@ const RegisterPage = () => {
   };
 
   const handleOnRegister = async () => {
-    //TODO: FormValidation
+    console.log(form);
+    const errors = validateRegister(form);
+    setFormErrors((prevErrors) => ({
+      ...prevErrors,
+      ...errors,
+    }));
+
+    if (Object.values(errors).some((error) => error !== "")) {
+      return;
+    }
+
     try {
-      const loggedIn = await auth.register(form);
-
-      if (!loggedIn) {
-        throw new Error("Error logging in");
-      }
-
-      console.log("Successfully auth");
-
+      await auth.register(form);
       navigate("/register/profile", { replace: true });
-    } catch (error) {
-      console.error(error);
+    } catch (error: unknown) {
+      //TODO Fix this nonsense
+      if (error instanceof Error) {
+        if (
+          error.message ===
+          '{"success":false,"message":"Email is already in use"}'
+        ) {
+          setFormErrors((prevErrors) => ({
+            ...prevErrors,
+            email: "Email is already in use",
+          }));
+        }
+      } else {
+        console.error("An unknown error occurred during registration");
+      }
     }
   };
 
   return (
     <PageContainer variant="centered">
-      <Card>
+      <Panel>
         <Stack gap={8}>
-          <Section className="text-center">
+          <Box className="text-center">
             <p>Hey, there</p>
             <h4 className="text-h4 font-bold">Create an account</h4>
-          </Section>
+          </Box>
 
-          <Stack gap={4}>
+          <Stack gap={1}>
             {formFields.map((field) => (
               <Input
                 key={field.name}
@@ -87,6 +98,7 @@ const RegisterPage = () => {
                 value={form[field.name]}
                 onChange={handleChange}
                 disabled={auth.loading}
+                errorText={formErrors[field.name]}
               />
             ))}
 
@@ -100,6 +112,7 @@ const RegisterPage = () => {
               endIcon={showPassword ? Show : Hide}
               onEndIconClick={() => setShowPassword((v) => !v)}
               disabled={auth.loading}
+              errorText={formErrors.password}
             />
 
             <Checkbox
@@ -117,7 +130,7 @@ const RegisterPage = () => {
               disabled={auth.loading}
             />
             <Line middleText="Or" />
-            <Redirect
+            <AuthRedirect
               text="Already have an account?"
               linkText="Login"
               to="/login"
@@ -125,7 +138,7 @@ const RegisterPage = () => {
             />
           </Stack>
         </Stack>
-      </Card>
+      </Panel>
     </PageContainer>
   );
 };

@@ -1,11 +1,11 @@
 import type { ReactNode } from "react";
 
-interface CardProps {
+interface PanelProps {
   children: ReactNode;
   className?: string;
 }
 
-const Card = ({ children, className = "" }: CardProps) => {
+const Panel = ({ children, className = "" }: PanelProps) => {
   return (
     <div className={`w-full max-w-md rounded-2xl ${className}`}>
       {children}
@@ -13,4 +13,4 @@ const Card = ({ children, className = "" }: CardProps) => {
   );
 };
 
-export default Card;
+export default Panel;

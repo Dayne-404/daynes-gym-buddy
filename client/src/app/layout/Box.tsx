@@ -1,12 +1,12 @@
 import type { ReactNode } from "react";
 
-interface SectionProps {
+interface BoxProps {
   children: ReactNode;
   className?: string;
 }
 
-const Section = ({ children, className = "" }: SectionProps) => {
+const Box = ({ children, className = "" }: BoxProps) => {
   return <div className={`w-full ${className}`}>{children}</div>;
 };
 
-export default Section;
+export default Box;

@@ -11,6 +11,7 @@ interface FormInputProps {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   disabled?: boolean;
+  errorText?: string;
 }
 
 const Input = ({
@@ -23,34 +24,47 @@ const Input = ({
   value,
   onChange,
   disabled = false,
+  errorText,
 }: FormInputProps) => {
+  const containerStyle = `flex items-center w-full h-12 rounded-2xl px-4 bg-border border transition-all duration-200 focus-within:ring-2 focus-within:ring-primary ${errorText ? "border-red-500 focus-within:ring-red-500" : "border-transparent"}`;
+
+  const iconStyle = errorText ? "text-red-500" : "text-gray-100";
+  const inputStyle = `w-full h-full bg-transparent outline-none ${errorText ? "placeholder-red-500" : ""}`;
+  const endIconStyle = errorText ? "text-red-500" : "text-gray-100";
+
   return (
-    <div className="flex items-center w-full h-12 rounded-2xl px-4 bg-border border border-transparent transition-all duration-200 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/30">
-      {Icon && (
-        <span className="text-gray-100 pr-4">
-          <Icon set="light" primaryColor="currentColor" size={20} />
-        </span>
-      )}
-      <input
-        className="w-full h-full bg-transparent outline-none"
-        name={name}
-        type={type}
-        placeholder={placeholder}
-        value={value}
-        onChange={onChange}
-        required
-        disabled={disabled}
-      />
-      {EndIcon && (
-        <button
-          type="button"
-          onClick={onEndIconClick}
-          className="text-gray-100 hover:text-primary ml-4"
+    <div>
+      <div className={containerStyle}>
+        {Icon && (
+          <span className={`pr-4 ${iconStyle}`}>
+            <Icon set="light" primaryColor="currentColor" size={20} />
+          </span>
+        )}
+        <input
+          className={inputStyle}
+          name={name}
+          type={type}
+          placeholder={placeholder}
+          value={value}
+          onChange={onChange}
+          required
           disabled={disabled}
-        >
-          <EndIcon set="light" primaryColor="currentColor" size={20} />
-        </button>
-      )}
+        />
+        {EndIcon && (
+          <button
+            type="button"
+            onClick={onEndIconClick}
+            className={`ml-4 ${endIconStyle}`}
+            disabled={disabled}
+          >
+            <EndIcon set="light" primaryColor="currentColor" size={20} />
+          </button>
+        )}
+      </div>
+
+      <p className="text-xs text-red-500 mx-4 mt-0.5 text-center min-h-3.5">
+        {errorText}
+      </p>
     </div>
   );
 };

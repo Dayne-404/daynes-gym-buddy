@@ -1,5 +1,5 @@
 import { type RouteObject } from "react-router-dom";
-import { ProtectedRoute } from "../guards/ProtectedRoute";
+import { ProtectedRoute } from "../routeGuards/ProtectedRoute";
 
 export const protectedRoutes: RouteObject = {
   element: <ProtectedRoute />,

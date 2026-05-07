@@ -4,6 +4,7 @@ interface UserContextType {
     user: User | null;
     setUser: (newUser: User | null) => void;
     profileComplete: boolean;
+    updateProfile: (goalWeightLb: string, dailyCalories: string) => Promise<User>;
 }
 
 export const UserContext = createContext<UserContextType | undefined>(undefined);

@@ -1,6 +1,5 @@
-import PageContainer from "@/app/layouts/PageContainer";
-import Stack from "@/app/layouts/Stack";
-import Input from "@/components/Input";
+import { Panel, Stack, Box, PageContainer } from "@/app/layout";
+import { Button, Input } from "@/components";
 import {
   TwoUsers,
   Calendar,
@@ -10,23 +9,14 @@ import {
   type IconProps,
 } from "react-iconly";
 import { useState, type FC } from "react";
-import Section from "@/app/layouts/Section";
-import Card from "@/app/layouts/Card";
-import Button from "@/components/Button";
 import heroImage from "@/assets/woman_lifting.svg";
-import { apiRequest } from "@/services/apiClient";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "@/features/user";
-
-interface RegisterProfileForm {
-  gender: string;
-  dob: string;
-  weight: string;
-  dailyCalories: string;
-}
+import type { ProfileForm } from "../types/form.types";
+import { validateProfile } from "../services/validateFields";
 
 const formFields: {
-  name: keyof RegisterProfileForm;
+  name: keyof ProfileForm;
   placeholder: string;
   type: string;
   icon: FC<IconProps>;
@@ -56,57 +46,53 @@ const formFields: {
 
 const RegisterProfilePage = () => {
   const navigate = useNavigate();
-  const user = useUser();
-
-  const [form, setForm] = useState<RegisterProfileForm>({
+  const { updateProfile } = useUser();
+  const [form, setForm] = useState<ProfileForm>({
     gender: "",
     dob: "",
     weight: "",
     dailyCalories: "",
   });
+  const [formErrors, setFormErrors] = useState<{
+    [key in keyof ProfileForm]: string;
+  }>({ gender: "", dob: "", weight: "", dailyCalories: "" });
 
-  const handleChange = (name: keyof RegisterProfileForm, value: string) => {
+  const handleChange = (name: keyof ProfileForm, value: string) => {
     setForm((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
-  const onNext = async () => {
+  const handleNext = async () => {
+    const errors = validateProfile(form);
+
+    setFormErrors((prev) => ({
+      ...prev,
+      ...errors,
+    }));
+
+    if (Object.values(errors).some((error) => error !== "")) {
+      return;
+    }
+
     try {
-      const data = await apiRequest<{user: User}>({
-        endpoint: "/users/me",
-        method: "PUT",
-        body: JSON.stringify({
-          goalWeightLb: form.weight,
-          dailyCalorieGoal: form.dailyCalories,
-        }),
-      });
-
-      if (!data) {
-        throw new Error("Error updating profile");
-      }
-
-      console.log("Sucessfully registered");
-
-      console.log(data.user);
-      user.setUser(data.user);
-
-      navigate("/register/profile", { replace: true });
+      await updateProfile(form.weight, form.dailyCalories);
+      navigate("/", { replace: true });
     } catch (error) {
-      console.error(error);
+      console.error("Error updating:", error);
     }
   };
 
   return (
     <PageContainer variant="centered">
-      <Card>
-        <Stack gap={4}>
+      <Panel>
+        <Stack gap={1}>
           <img src={heroImage} alt="Fitness Illustration" className="-mt-20" />
-          <Section className="text-center">
+          <Box className="text-center">
             <h4 className="text-h4 font-bold">Lets Complete your profile</h4>
             <p>It will help us know more about you!</p>
-          </Section>
+          </Box>
 
           {formFields.map((field) => (
             <Input
@@ -118,13 +104,14 @@ const RegisterProfilePage = () => {
               onChange={(e) => handleChange(field.name, e.target.value)}
               icon={field.icon}
               endIcon={field.endIcon || undefined}
+              errorText={formErrors[field.name]}
             />
           ))}
-          <Section>
-            <Button text="Next" onClick={onNext} />
-          </Section>
+          <Box>
+            <Button text="Next" onClick={handleNext} />
+          </Box>
         </Stack>
-      </Card>
+      </Panel>
     </PageContainer>
   );
 };

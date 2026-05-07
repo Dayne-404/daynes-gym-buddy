@@ -5,7 +5,7 @@ interface CheckboxProps {
   disabled?: boolean;
 }
 
-export const Checkbox = ({
+const Checkbox = ({
   label,
   checked,
   setChecked,
@@ -24,3 +24,5 @@ export const Checkbox = ({
     </label>
   );
 };
+
+export default Checkbox;

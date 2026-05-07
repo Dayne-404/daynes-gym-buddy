@@ -1,51 +1,65 @@
 import { useState } from "react";
-import PageContainer from "@/app/layouts/PageContainer";
-import Section from "@/app/layouts/Section";
-import Stack from "@/app/layouts/Stack";
-import Card from "@/app/layouts/Card";
-import Input from "@/components/Input";
+import { Panel, Stack, Box, PageContainer } from "@/app/layout";
+import { Input, Button, Line } from "@/components";
 import { Lock, Show, Hide, Message } from "react-iconly";
-import Button from "../../../components/Button";
-import Line from "@/components/Line";
-import Redirect from "../components/Redirect";
+import AuthRedirect from "../components/AuthRedirect";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { validateLogin } from "../services/validateFields";
 
-export const LoginPage = () => {
+const LoginPage = () => {
   const [email, setEmail] = useState<string>("dayne@example.com");
   const [password, setPassword] = useState<string>("password");
+  const [formErrors, setFormErrors] = useState<{
+    email: string;
+    password: string;
+  }>({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const auth = useAuth();
   const navigate = useNavigate();
 
   const handleLogin = async () => {
+    const errors = validateLogin(email, password);
+    setFormErrors((prev) => ({ ...prev, ...errors }));
+
+    if (Object.values(errors).some((error) => error !== "")) {
+      return;
+    }
+
     try {
-      const loggedIn = await auth.login(email, password);
-
-      if (!loggedIn) {
-        throw new Error("Error logging in");
-      }
-
-      console.log("Successfully logged in");
-
+      await auth.login(email, password);
       navigate("/", { replace: true });
-    } catch (error) {
-      console.error(error);
+    } catch (error: unknown) {
+      //TODO Fix this nonsense
+      if (error instanceof Error) {
+        if (
+          error.message ===
+          '{"success":false,"message":"Incorrect email or password"}'
+        ) {
+          setFormErrors((prevErrors) => ({
+            ...prevErrors,
+            email: "Incorrect Email or Password",
+            password: " ",
+          }));
+        }
+      } else {
+        console.error("An unknown error occurred during registration");
+      }
     }
   };
 
   return (
     <PageContainer variant="centered">
-      <Card>
+      <Panel>
         <Stack gap={8}>
           {/* Header */}
-          <Section className="text-center">
+          <Box className="text-center">
             <p>Hey, there</p>
             <h4 className="text-h4 font-bold">Welcome Back</h4>
-          </Section>
+          </Box>
 
           {/* Form */}
-          <Stack gap={4}>
+          <Stack gap={1}>
             <Input
               key={"login-email"}
               name="email"
@@ -57,6 +71,7 @@ export const LoginPage = () => {
                 setEmail(e.target.value)
               }
               disabled={auth.loading}
+              errorText={formErrors.email}
             />
             <Input
               key={"login-password"}
@@ -71,6 +86,7 @@ export const LoginPage = () => {
               endIcon={showPassword ? Show : Hide}
               onEndIconClick={() => setShowPassword((v) => !v)}
               disabled={auth.loading}
+              errorText={formErrors.password}
             />
             <a className="text-gray-700 underline text-center" href="#">
               Forgot your password?
@@ -79,16 +95,22 @@ export const LoginPage = () => {
 
           {/* Submit Button */}
           <Stack gap={4}>
-            <Button text="Login" onClick={handleLogin} disabled={auth.loading}/>
+            <Button
+              text="Login"
+              onClick={handleLogin}
+              disabled={auth.loading}
+            />
             <Line middleText="Or" />
-            <Redirect
+            <AuthRedirect
               text="Don't have an account yet?"
               linkText="Register"
               to="/register"
             />
           </Stack>
         </Stack>
-      </Card>
+      </Panel>
     </PageContainer>
   );
 };
+
+export default LoginPage;

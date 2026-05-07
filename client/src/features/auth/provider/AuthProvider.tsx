@@ -6,109 +6,79 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { apiRequest, setAuthHandlers } from "../../../services/apiClient";
+import { apiRequest, setAuthHandlers } from "@/services/ApiClient";
 import { useUser } from "@/features/user";
 import { AuthContext } from "@/features/auth";
+import type { RegisterForm } from "../types/form.types";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [authInitializing, setAuthInitializing] = useState(true);
   const [loading, setLoading] = useState<boolean>(false);
-  const [loginError, setLoginError] = useState<string>("");
   const { setUser } = useUser();
   const hasTriedRefresh = useRef(false);
 
   const isAuthenticated = !!accessToken;
 
   const applyAuthData = useCallback(
-  (data: { accessToken?: string; user?: User }) => {
-    if (!data?.accessToken || !data?.user) {
-      throw new Error("Missing auth response data");
-    }
+    (data: { accessToken?: string; user?: User }) => {
+      if (!data?.accessToken || !data?.user) {
+        throw new Error("Missing auth response data");
+      }
 
-    setAccessToken(data.accessToken);
-    setUser(data.user);
-  },
-  [setUser],
-);
+      setAccessToken(data.accessToken);
+      setUser(data.user);
+    },
+    [setUser],
+  );
 
-  const register = async (form: {
-    firstName: string;
-    lastName: string;
-    email: string;
-    password: string;
-  }): Promise<boolean> => {
-    console.log("Registering...");
+  const authAction = async <T,>(fn: () => Promise<T>): Promise<T> => {
     setLoading(true);
-    setLoginError("");
 
     try {
-      const data = await apiRequest<{ user: User, accessToken: string }>({
+      return await fn();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const register = (form: RegisterForm): Promise<void> =>
+    authAction(async () => {
+      const data = await apiRequest<{ user: User; accessToken: string }>({
         method: "POST",
         endpoint: "/auth/register",
         body: JSON.stringify(form),
       });
 
       applyAuthData(data);
-      return true;
-    } catch (error) {
-      console.error("Register failed:", error);
-      setAccessToken(null);
-      setUser(null);
+    });
 
-      const errorMsg = error instanceof Error ? error.message : String(error);
-      setLoginError(errorMsg);
-
-      return false;
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const login = async (email: string, password: string): Promise<boolean> => {
-    console.log("Logging in...");
-    setLoading(true);
-    setLoginError("");
-
-    try {
-      const data = await apiRequest<{ user: User, accessToken: string }>({
+  const login = (email: string, password: string): Promise<void> =>
+    authAction(async () => {
+      const data = await apiRequest<{ user: User; accessToken: string, }>({
         method: "POST",
         endpoint: "/auth/login",
         body: JSON.stringify({ email, password }),
+        skipAuthRefresh: true,
       });
 
       applyAuthData(data);
-      return true;
-    } catch (error) {
-      console.error("Login failed:", error);
-      setAccessToken(null);
-      setUser(null);
+    });
 
-      const errorMsg = error instanceof Error ? error.message : String(error);
-      setLoginError(errorMsg);
+  const logout = useCallback(async (): Promise<void> => {
+    console.log("Logout...");
 
-      return false;
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const logout = useCallback(async (): Promise<boolean> => {
-    console.log("Logging out...");
     try {
       await apiRequest({
         method: "POST",
         endpoint: "/auth/logout",
       });
-
-      console.log("Logout successful");
     } catch (error) {
       console.error("Logout failed:", error);
     }
 
     setAccessToken(null);
     setUser(null);
-    return true;
   }, [setUser]);
 
   useLayoutEffect(() => {
@@ -118,7 +88,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const restoreAccessToken = async () => {
       console.log("Restoring access token...");
       try {
-        const data = await apiRequest<{ user: User, accessToken: string }>({
+        const data = await apiRequest<{ user: User; accessToken: string }>({
           endpoint: "/auth/refresh",
           method: "POST",
           skipAuthRefresh: true,
@@ -139,8 +109,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     setAuthHandlers({
       refreshAccessToken: async () => {
+        console.log("Refreshing access token...");
         try {
-          const data = await apiRequest<{ user: User, accessToken: string }>({
+          const data = await apiRequest<{ user: User; accessToken: string }>({
             method: "POST",
             endpoint: "/auth/refresh",
           });
@@ -168,7 +139,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         accessToken,
         setAccessToken,
         login,
-        loginError,
         logout,
         loading,
         register,
