@@ -1,10 +1,11 @@
 import { createContext, useContext } from "react";
+import type { RegisterForm } from "../types/form.types";
 
 interface AuthContextType {
   accessToken: string | null;
   setAccessToken: (token: string | null) => void;
   login: (email: string, password: string) => Promise<void>;
-  register: (form: {firstName: string, lastName: string, email: string, password: string}) => Promise<void>;
+  register: (form: RegisterForm) => Promise<void>;
   logout: () => Promise<void>;
   loading: boolean;
   isAuthenticated: boolean;

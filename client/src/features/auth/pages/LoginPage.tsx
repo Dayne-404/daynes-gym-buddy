@@ -6,44 +6,28 @@ import AuthRedirect from "../components/AuthRedirect";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { validateLogin } from "../services/validateFields";
+import { ApiError } from "@/services/ApiError";
+import { useForm } from "@/hooks/useForm";
 
 const LoginPage = () => {
-  const [email, setEmail] = useState<string>("dayne@example.com");
-  const [password, setPassword] = useState<string>("password");
-  const [formErrors, setFormErrors] = useState<{
-    email: string;
-    password: string;
-  }>({ email: "", password: "" });
+  const { values, errors, handleChange, submit, setFieldError } = useForm(
+    { email: "", password: "" },
+    validateLogin,
+  );
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const auth = useAuth();
   const navigate = useNavigate();
 
   const handleLogin = async () => {
-    const errors = validateLogin(email, password);
-    setFormErrors((prev) => ({ ...prev, ...errors }));
-
-    if (Object.values(errors).some((error) => error !== "")) {
-      return;
-    }
+    if (!submit()) return;
 
     try {
-      await auth.login(email, password);
+      await auth.login(values.email, values.password);
       navigate("/", { replace: true });
     } catch (error: unknown) {
-      //TODO Fix this nonsense
-      if (error instanceof Error) {
-        if (
-          error.message ===
-          '{"success":false,"message":"Incorrect email or password"}'
-        ) {
-          setFormErrors((prevErrors) => ({
-            ...prevErrors,
-            email: "Incorrect Email or Password",
-            password: " ",
-          }));
-        }
-      } else {
-        console.error("An unknown error occurred during registration");
+      if (error instanceof ApiError) {
+        setFieldError("email", error.message);
+        setFieldError("password", " ");
       }
     }
   };
@@ -61,32 +45,26 @@ const LoginPage = () => {
           {/* Form */}
           <Stack gap={1}>
             <Input
-              key={"login-email"}
               name="email"
               placeholder="Email"
               type="email"
-              value={email}
+              value={values.email}
               icon={Message}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setEmail(e.target.value)
-              }
+              onChange={handleChange}
               disabled={auth.loading}
-              errorText={formErrors.email}
+              errorText={errors.email}
             />
             <Input
-              key={"login-password"}
               name="password"
               placeholder="Password"
               type={showPassword ? "text" : "password"}
-              value={password}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setPassword(e.target.value)
-              }
+              value={values.password}
+              onChange={handleChange}
               icon={Lock}
               endIcon={showPassword ? Show : Hide}
               onEndIconClick={() => setShowPassword((v) => !v)}
               disabled={auth.loading}
-              errorText={formErrors.password}
+              errorText={errors.password}
             />
             <a className="text-gray-700 underline text-center" href="#">
               Forgot your password?

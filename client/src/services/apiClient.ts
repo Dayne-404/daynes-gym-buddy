@@ -1,3 +1,10 @@
+import { ApiError } from "./ApiError";
+
+interface ApiErrorResponse {
+  message?: string;
+  errors?: Record<string, string>;
+}
+
 const API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
 interface ApiRequestOptions {
@@ -61,8 +68,8 @@ export async function apiRequest<T>({
   }
 
   if (!res.ok) {
-    const text = await res.text();
-    throw new Error(text || "Request failed");
+    const data = await res.json().catch((): ApiErrorResponse => ({}));
+    throw new ApiError(res.status, data.message ?? "Request failed", data.errors);
   }
 
   if (res.status === 204) {

@@ -8,12 +8,13 @@ import {
   ArrowDownSquare,
   type IconProps,
 } from "react-iconly";
-import { useState, type FC } from "react";
+import { type FC } from "react";
 import heroImage from "@/assets/woman_lifting.svg";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "@/features/user";
 import type { ProfileForm } from "../types/form.types";
 import { validateProfile } from "../services/validateFields";
+import { useForm } from "@/hooks/useForm";
 
 const formFields: {
   name: keyof ProfileForm;
@@ -47,40 +48,19 @@ const formFields: {
 const RegisterProfilePage = () => {
   const navigate = useNavigate();
   const { updateProfile } = useUser();
-  const [form, setForm] = useState<ProfileForm>({
-    gender: "",
-    dob: "",
-    weight: "",
-    dailyCalories: "",
-  });
-  const [formErrors, setFormErrors] = useState<{
-    [key in keyof ProfileForm]: string;
-  }>({ gender: "", dob: "", weight: "", dailyCalories: "" });
-
-  const handleChange = (name: keyof ProfileForm, value: string) => {
-    setForm((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  const { values, errors, handleChange, submit } = useForm(
+    { gender: "", dob: "", weight: "", dailyCalories: "" },
+    validateProfile,
+  );
 
   const handleNext = async () => {
-    const errors = validateProfile(form);
-
-    setFormErrors((prev) => ({
-      ...prev,
-      ...errors,
-    }));
-
-    if (Object.values(errors).some((error) => error !== "")) {
-      return;
-    }
+    if (!submit()) return;
 
     try {
-      await updateProfile(form.weight, form.dailyCalories);
+      await updateProfile(values.weight, values.dailyCalories);
       navigate("/", { replace: true });
     } catch (error) {
-      console.error("Error updating:", error);
+      console.error("Error updating profile:", error);
     }
   };
 
@@ -100,11 +80,11 @@ const RegisterProfilePage = () => {
               name={field.name}
               placeholder={field.placeholder}
               type={field.type}
-              value={form[field.name]}
-              onChange={(e) => handleChange(field.name, e.target.value)}
+              value={values[field.name]}
+              onChange={handleChange}
               icon={field.icon}
-              endIcon={field.endIcon || undefined}
-              errorText={formErrors[field.name]}
+              endIcon={field.endIcon}
+              errorText={errors[field.name]}
             />
           ))}
           <Box>

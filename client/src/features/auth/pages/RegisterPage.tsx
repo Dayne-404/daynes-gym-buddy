@@ -7,6 +7,8 @@ import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { type RegisterForm } from "../types/form.types";
 import { validateRegister } from "../services/validateFields";
+import { ApiError } from "@/services/ApiError";
+import { useForm } from "@/hooks/useForm";
 
 const formFields: {
   name: keyof RegisterForm;
@@ -20,63 +22,24 @@ const formFields: {
 ];
 
 const RegisterPage = () => {
-  const [form, setForm] = useState<RegisterForm>({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-  });
-  const [formErrors, setFormErrors] = useState<{
-    [key in keyof RegisterForm]: string;
-  }>({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-  });
+  const { values, errors, handleChange, submit, setFieldError } = useForm(
+    { firstName: "", lastName: "", email: "", password: "" },
+    validateRegister,
+  );
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [checked, setChecked] = useState<boolean>(false);
   const navigate = useNavigate();
   const auth = useAuth();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-
-    setForm((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
   const handleOnRegister = async () => {
-    console.log(form);
-    const errors = validateRegister(form);
-    setFormErrors((prevErrors) => ({
-      ...prevErrors,
-      ...errors,
-    }));
-
-    if (Object.values(errors).some((error) => error !== "")) {
-      return;
-    }
+    if (!submit()) return;
 
     try {
-      await auth.register(form);
+      await auth.register(values);
       navigate("/register/profile", { replace: true });
     } catch (error: unknown) {
-      //TODO Fix this nonsense
-      if (error instanceof Error) {
-        if (
-          error.message ===
-          '{"success":false,"message":"Email is already in use"}'
-        ) {
-          setFormErrors((prevErrors) => ({
-            ...prevErrors,
-            email: "Email is already in use",
-          }));
-        }
-      } else {
-        console.error("An unknown error occurred during registration");
+      if (error instanceof ApiError) {
+        setFieldError("email", error.message);
       }
     }
   };
@@ -95,10 +58,10 @@ const RegisterPage = () => {
               <Input
                 key={field.name}
                 {...field}
-                value={form[field.name]}
+                value={values[field.name]}
                 onChange={handleChange}
                 disabled={auth.loading}
-                errorText={formErrors[field.name]}
+                errorText={errors[field.name]}
               />
             ))}
 
@@ -106,13 +69,13 @@ const RegisterPage = () => {
               name="password"
               placeholder="Password"
               type={showPassword ? "text" : "password"}
-              value={form.password}
+              value={values.password}
               onChange={handleChange}
               icon={Lock}
               endIcon={showPassword ? Show : Hide}
               onEndIconClick={() => setShowPassword((v) => !v)}
               disabled={auth.loading}
-              errorText={formErrors.password}
+              errorText={errors.password}
             />
 
             <Checkbox

@@ -32,7 +32,7 @@ export const validateRegister = (form: RegisterForm): ValidationErrors => {
   if (!form.lastName) {
     errors.lastName = "Last name is required";
   } else if (form.lastName.length > MAX_INPUT_LENGTH) {
-    errors.lastName = "Last name cannot be bigger than 50 characters";
+    errors.lastName = "Last name cannot be bigger than 20 characters";
   }
 
   // Validate email format
@@ -44,19 +44,14 @@ export const validateRegister = (form: RegisterForm): ValidationErrors => {
   return errors;
 };
 
-export const validateLogin = (
-  email: string,
-  password: string,
-): { email: string; password: string } => {
-  const errors: { email: string; password: string } = {
-    email: "",
-    password: "",
+export const validateLogin = (form: {
+  email: string;
+  password: string;
+}): { email: string; password: string } => {
+  return {
+    email: validateEmail(form.email),
+    password: validatePassword(form.password),
   };
-
-  errors.email = validateEmail(email);
-  errors.password = validatePassword(password);
-
-  return errors;
 };
 
 export const validateEmail = (email: string): string => {

@@ -8,6 +8,7 @@ import {
 } from "react";
 import { apiRequest, setAuthHandlers } from "@/services/ApiClient";
 import { useUser } from "@/features/user";
+import type { User } from "@/features/user";
 import { AuthContext } from "@/features/auth";
 import type { RegisterForm } from "../types/form.types";
 

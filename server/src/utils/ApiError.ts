@@ -7,12 +7,14 @@
 export default class ApiError extends Error {
   status: number;
   isOperational: boolean;
+  errors?: Record<string, string>;
 
-  constructor(status: number, message: string) {
+  constructor(status: number, message: string, errors?: Record<string, string>) {
     super(message);
 
     this.status = status;
     this.isOperational = true;
+    this.errors = errors;
 
     Error.captureStackTrace(this, this.constructor);
   }

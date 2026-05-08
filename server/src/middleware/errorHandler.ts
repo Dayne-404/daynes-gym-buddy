@@ -77,6 +77,7 @@ export const errorHandler = (
   return res.status(status).json({
     success: false,
     message,
+    ...(isApiError && error.errors ? { errors: error.errors } : {}),
     ...(env.isProd ? {} : { stack: error.stack }),
   });
 };

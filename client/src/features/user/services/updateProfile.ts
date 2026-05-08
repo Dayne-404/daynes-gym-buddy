@@ -1,4 +1,5 @@
 import { apiRequest } from "@/services/ApiClient";
+import type { User } from "../types/user.types";
 
 interface UpdateProfilePayload {
   goalWeightLb: string;
