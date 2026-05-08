@@ -4,12 +4,17 @@ import DashboardCard from "../components/DashboardCard";
 import CalorieRing from "../components/CalorieRing";
 import WeightTrend from "../components/WeightTrend";
 import ProgressPhoto from "../components/ProgressPhoto";
+import { useUser } from "@/features/user";
 
 const DashboardPage = () => {
+  const { user } = useUser();
+
+  if(!user) return null;
+
   return (
     <PageContainer>
       <Body>
-        <DashboardHeader userFirstName="Dayne" />
+        <DashboardHeader userFirstName={user.firstName} />
         <Stack gap={4} className="px-2">
           <Stack direction="row" gap={4}>
             <DashboardCard title="Calories" center>
