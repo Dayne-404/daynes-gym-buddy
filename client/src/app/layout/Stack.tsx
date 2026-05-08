@@ -3,6 +3,11 @@ import type { ReactNode } from "react";
 interface StackProps {
   children: ReactNode;
   gap?: number;
+  direction?: "row" | "col";
+  center?: boolean;
+  centerX?: boolean;
+  centerY?: boolean;
+  spaceBetween?: boolean;
   className?: string;
 }
 
@@ -15,9 +20,28 @@ const gapMap: Record<number, string> = {
   8: "gap-8",
 };
 
-const Stack = ({ children, gap = 4, className = "" }: StackProps) => {
+const Stack = ({
+  children,
+  gap = 4,
+  direction = "col",
+  center = false,
+  centerX = false,
+  centerY = false,
+  spaceBetween = false,
+  className = "",
+}: StackProps) => {
+  const alignItems = center || centerY ? "items-center" : "";
+  const justifyContent =
+    center || centerX
+      ? "justify-center"
+      : spaceBetween
+        ? "justify-between"
+        : "";
+
   return (
-    <div className={`flex flex-col ${gapMap[gap]} ${className}`}>
+    <div
+      className={`flex flex-${direction} ${gapMap[gap]} ${alignItems} ${justifyContent} ${className}`.trim()}
+    >
       {children}
     </div>
   );
