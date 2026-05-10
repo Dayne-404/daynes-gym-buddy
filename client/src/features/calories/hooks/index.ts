@@ -1,1 +1,0 @@
-export { useCalories } from "./useCalories";

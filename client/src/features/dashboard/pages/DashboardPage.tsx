@@ -1,8 +1,11 @@
 import { Body, PageContainer, Stack } from "@/app/layout";
 import { Line } from "@/components";
 import { useUser } from "@/features/user";
-import { DashboardHeader, ProgressPhoto, RoutinesList, StatsRow } from "../components";
-import { useDashboardData } from "../hooks";
+import DashboardHeader from "../components/DashboardHeader";
+import ProgressPhoto from "../components/ProgressPhoto";
+import RoutinesList from "../components/RoutinesList";
+import StatsRow from "../components/StatsRow";
+import { useDashboardData } from "../hooks/useDashboardData";
 
 const DashboardPage = () => {
   const { user } = useUser();

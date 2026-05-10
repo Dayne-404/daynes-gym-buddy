@@ -1,6 +1,5 @@
 import React from "react";
-import { Box, Stack } from "@/app/layout";
-import Card from "@/app/layout/Card";
+import { Box, Card, Stack } from "@/app/layout";
 import { Line } from "@/components";
 import { Delete } from "react-iconly";
 

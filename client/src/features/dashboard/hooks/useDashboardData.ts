@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { fetchCaloriesForDate } from "@/features/calories/services/fetchCalories";
-import type { Calorie } from "@/features/calories/types/calories.types";
+import { fetchCaloriesForDate } from "@/features/calories";
+import type { Calorie } from "@/features/calories";
 import { fetchWeights } from "../services/fetchWeights";
 import { fetchRoutines } from "../services/fetchRoutines";
 import type { Routine, Weight } from "../types/dashboard.types";

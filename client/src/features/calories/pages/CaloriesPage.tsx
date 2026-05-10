@@ -1,15 +1,12 @@
 import { useState } from "react";
 import { Body, PageContainer } from "@/app/layout";
-import { Line } from "@/components";
-import PageHeader from "@/components/PageHeader";
+import { Line, PageHeader } from "@/components";
 import { useUser } from "@/features/user";
-import {
-  CalendarStrip,
-  CalorieLogInput,
-  CalorieLogList,
-  CalorieProgressBar,
-} from "../components";
-import { useCalories } from "../hooks";
+import CalendarStrip from "../components/CalendarStrip";
+import CalorieLogInput from "../components/CalorieLogInput";
+import CalorieLogList from "../components/CalorieLogList";
+import CalorieProgressBar from "../components/CalorieProgressBar";
+import { useCalories } from "../hooks/useCalories";
 
 const today = new Date().toISOString().split("T")[0];
 

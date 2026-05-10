@@ -5,3 +5,4 @@ export { default as Input } from "./Input";
 export { default as IconButton } from "./IconButton";
 export { default as Line } from "./Line";
 export { default as NavWrapper } from "./NavWrapper";
+export { default as PageHeader } from "./PageHeader";
