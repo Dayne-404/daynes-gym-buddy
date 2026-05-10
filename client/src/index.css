@@ -99,4 +99,13 @@
   .shadow-primary {
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
   }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
 }

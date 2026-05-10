@@ -12,11 +12,12 @@ interface ButtonProps {
   size?: ButtonSize;
   variant?: ButtonVariant;
   shadow?: boolean;
+  className?: string;
 }
 
 const sizeClasses: Record<ButtonSize, string> = {
   sm: "w-28 h-9 text-xs",
-  md: "w-40 h-15",
+  md: "w-40 h-12",
   lg: "w-56 h-15",
   full: "w-full h-15",
 };
@@ -35,6 +36,7 @@ const Button = ({
   size = "full",
   variant = "gradient-brand",
   shadow = true,
+  className,
 }: ButtonProps) => {
   return (
     <button
@@ -53,6 +55,7 @@ const Button = ({
         active:scale-[0.98]
         focus:outline-none
         focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/30
+        ${className}
       `}
     >
       {text}

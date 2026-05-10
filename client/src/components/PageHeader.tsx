@@ -9,7 +9,7 @@ interface PageHeaderProps {
 
 const PageHeader = ({ text }: PageHeaderProps) => {
   return (
-    <Stack direction="row" centerY spaceBetween>
+    <Stack direction="row" centerY spaceBetween className="pb-8">
       <IconButton icon={<img src={BackArrow} />} />
       <h1 className="text-large font-bold">{text}</h1>
       <IconButton icon={<img src={DoubleDots} />} />

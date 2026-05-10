@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 interface StackProps {
-  children: ReactNode;
+  children?: ReactNode;
   gap?: number;
   direction?: "row" | "col";
   center?: boolean;
