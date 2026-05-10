@@ -1,30 +1,36 @@
 import { Body, PageContainer, Stack } from "@/app/layout";
-import DashboardHeader from "../components/DashboardHeader";
-import DashboardCard from "../components/DashboardCard";
-import CalorieRing from "../components/CalorieRing";
-import WeightTrend from "../components/WeightTrend";
-import ProgressPhoto from "../components/ProgressPhoto";
+import { Line } from "@/components";
 import { useUser } from "@/features/user";
+import DashboardHeader from "../components/DashboardHeader";
+import ProgressPhoto from "../components/ProgressPhoto";
+import RoutinesList from "../components/RoutinesList";
+import StatsRow from "../components/StatsRow";
+import { useDashboardData } from "../hooks/useDashboardData";
 
 const DashboardPage = () => {
   const { user } = useUser();
+  const { caloriesConsumed, currentWeight, previousWeight, routines, loading } =
+    useDashboardData();
 
-  if(!user) return null;
+  if (!user || loading) return null;
 
   return (
     <PageContainer>
       <Body>
-        <DashboardHeader userFirstName={user.firstName} />
-        <Stack gap={4} className="px-2">
-          <Stack direction="row" gap={4}>
-            <DashboardCard title="Calories" center>
-              <CalorieRing current={0} goal={2000} />
-            </DashboardCard>
-            <DashboardCard title="Weight">
-              <WeightTrend current={125} previous={125.5} />
-            </DashboardCard>
-          </Stack>
+        <DashboardHeader
+          userFirstName={user.firstName}
+          userLastName={user.lastName}
+        />
+        <Stack gap={4}>
+          <StatsRow
+            caloriesConsumed={caloriesConsumed}
+            calorieGoal={user.dailyCalorieGoal ?? 2000}
+            currentWeight={currentWeight}
+            previousWeight={previousWeight}
+          />
           <ProgressPhoto />
+          <Line />
+          <RoutinesList routines={routines} />
         </Stack>
       </Body>
     </PageContainer>

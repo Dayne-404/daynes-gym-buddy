@@ -5,8 +5,12 @@ export const getModel = (modelName: PrismaModelName) => {
   return prisma[modelName] as any;
 };
 
-export const findMany = async (modelName: PrismaModelName, where: any) => {
-  return getModel(modelName).findMany({ where });
+export const findMany = async (
+  modelName: PrismaModelName,
+  where: any,
+  include?: any
+) => {
+  return getModel(modelName).findMany({ where, ...(include && { include }) });
 };
 
 export const findUnique = async (modelName: PrismaModelName, where: any) => {

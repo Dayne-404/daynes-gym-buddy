@@ -9,6 +9,10 @@ import {
 
 import * as repo from "../repositories/crud.repository";
 
+const modelIncludes: Partial<Record<PrismaModelName, any>> = {
+  routine: { _count: { select: { routineExercises: true } } },
+};
+
 const sanitizeData = (data: any, fieldType: PrismaModelName) => {
   const sanitized = { ...data };
   delete sanitized.id;
@@ -33,7 +37,7 @@ export const createCrudService = (modelName: PrismaModelName) => {
       ...(date && { date }),
     };
 
-    return repo.findMany(modelName, where);
+    return repo.findMany(modelName, where, modelIncludes[modelName]);
   };
 
   const getById = async (id: number, userId?: number) => {

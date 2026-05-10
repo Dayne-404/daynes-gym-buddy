@@ -17,6 +17,7 @@ interface ApiRequestOptions {
 let refreshAccessToken: (() => Promise<string | null>) | null = null;
 let getAccessToken: (() => string | null) | null = null;
 let forceLogout: (() => void) | null = null;
+let refreshPromise: Promise<string | null> | null = null;
 
 export const setAuthHandlers = (handlers: {
   refreshAccessToken: () => Promise<string | null>;
@@ -57,7 +58,13 @@ export async function apiRequest<T>({
   let res = await makeRequest(token);
 
   if (!skipAuthRefresh && (res.status === 401 || res.status === 403)) {
-    const newToken = await refreshAccessToken?.();
+    if (!refreshPromise) {
+      refreshPromise = (refreshAccessToken?.() ?? Promise.resolve(null)).finally(
+        () => { refreshPromise = null; }
+      );
+    }
+
+    const newToken = await refreshPromise;
 
     if (!newToken) {
       forceLogout?.();

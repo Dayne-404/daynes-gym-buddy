@@ -14,6 +14,7 @@ import type { RegisterForm } from "../types/form.types";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
+  const accessTokenRef = useRef<string | null>(null);
   const [authInitializing, setAuthInitializing] = useState(true);
   const [loading, setLoading] = useState<boolean>(false);
   const { setUser } = useUser();
@@ -21,16 +22,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const isAuthenticated = !!accessToken;
 
+  const updateAccessToken = useCallback((token: string | null) => {
+    accessTokenRef.current = token;
+    setAccessToken(token);
+  }, []);
+
   const applyAuthData = useCallback(
     (data: { accessToken?: string; user?: User }) => {
       if (!data?.accessToken || !data?.user) {
         throw new Error("Missing auth response data");
       }
 
-      setAccessToken(data.accessToken);
+      updateAccessToken(data.accessToken);
       setUser(data.user);
     },
-    [setUser],
+    [updateAccessToken, setUser],
   );
 
   const authAction = async <T,>(fn: () => Promise<T>): Promise<T> => {
@@ -66,6 +72,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       applyAuthData(data);
     });
 
+  const clearAuthState = useCallback(() => {
+    updateAccessToken(null);
+    setUser(null);
+  }, [updateAccessToken, setUser]);
+
   const logout = useCallback(async (): Promise<void> => {
     console.log("Logout...");
 
@@ -73,14 +84,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       await apiRequest({
         method: "POST",
         endpoint: "/auth/logout",
+        skipAuthRefresh: true,
       });
     } catch (error) {
       console.error("Logout failed:", error);
     }
 
-    setAccessToken(null);
-    setUser(null);
-  }, [setUser]);
+    clearAuthState();
+  }, [clearAuthState]);
 
   useLayoutEffect(() => {
     if (hasTriedRefresh.current) return;
@@ -98,14 +109,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         applyAuthData(data);
       } catch (error) {
         console.error("Failed to restore access token:", error);
-        logout();
+        clearAuthState();
       } finally {
         setAuthInitializing(false);
       }
     };
 
     restoreAccessToken();
-  }, [applyAuthData, logout]);
+  }, [applyAuthData, clearAuthState]);
 
   useEffect(() => {
     setAuthHandlers({
@@ -115,6 +126,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           const data = await apiRequest<{ user: User; accessToken: string }>({
             method: "POST",
             endpoint: "/auth/refresh",
+            skipAuthRefresh: true,
           });
 
           applyAuthData(data);
@@ -125,20 +137,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       },
 
       getAccessToken: () => {
-        return accessToken;
+        return accessTokenRef.current;
       },
 
       forceLogout: () => {
         logout();
       },
     });
-  }, [applyAuthData, accessToken, logout]);
+  }, [applyAuthData, logout]);
 
   return (
     <AuthContext.Provider
       value={{
         accessToken,
-        setAccessToken,
+        setAccessToken: updateAccessToken,
         login,
         logout,
         loading,

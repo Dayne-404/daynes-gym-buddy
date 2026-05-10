@@ -4,7 +4,7 @@ export interface User {
   lastName: string;
   avatarColor: string;
   email: string;
-  goalWeightLb: string | null;
-  dailyCalorieGoal: string | null;
+  goalWeightLb: number | null;
+  dailyCalorieGoal: number | null;
   profileComplete: boolean;
 }

@@ -1,6 +1,6 @@
 import { type ReactNode } from "react";
 
-type CardVariant = "default" | "gradient-brand" | "gradient-secondary";
+type CardVariant = "default" | "gradient-brand" | "gradient-brand-opaque" | "gradient-secondary";
 
 interface CardProps {
   children: ReactNode;
@@ -19,6 +19,7 @@ const sizeClasses = {
 const variantClasses: Record<CardVariant, string> = {
   default: "",
   "gradient-brand": "bg-gradient-brand",
+  "gradient-brand-opaque": "bg-gradient-brand-opaque",
   "gradient-secondary": "bg-gradient-secondary",
 };
 
