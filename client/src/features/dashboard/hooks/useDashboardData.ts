@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
-import { fetchTodayCalories } from "../services/fetchCalories";
+import { fetchCaloriesForDate } from "@/features/calories/services/fetchCalories";
+import type { Calorie } from "@/features/calories/types/calories.types";
 import { fetchWeights } from "../services/fetchWeights";
 import { fetchRoutines } from "../services/fetchRoutines";
 import type { Routine, Weight } from "../types/dashboard.types";
+
+const today = new Date().toISOString().split("T")[0];
 
 interface DashboardData {
   caloriesConsumed: number;
@@ -24,9 +27,9 @@ export const useDashboardData = (): DashboardData => {
   });
 
   useEffect(() => {
-    Promise.all([fetchTodayCalories(), fetchWeights(), fetchRoutines()])
+    Promise.all([fetchCaloriesForDate(today), fetchWeights(), fetchRoutines()])
       .then(([calories, weights, routines]) => {
-        const caloriesConsumed = calories.reduce((sum, e) => sum + e.calories, 0);
+        const caloriesConsumed = calories.reduce((sum: number, e: Calorie) => sum + e.calories, 0);
 
         const sorted = [...weights].sort(
           (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
