@@ -1,23 +1,16 @@
 import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer } from "recharts";
 import type { Weight } from "../types/weight.types";
+import { formatShortDate } from "@/utils/date";
 
 interface WeightGraphProps {
   entries: Weight[];
   goalWeightLb: number | null;
 }
 
-const formatDate = (dateStr: string) => {
-  const [year, month, day] = dateStr.split("T")[0].split("-").map(Number);
-  return new Date(year, month - 1, day).toLocaleDateString([], {
-    month: "numeric",
-    day: "numeric",
-  });
-};
-
 const WeightGraph = ({ entries, goalWeightLb }: WeightGraphProps) => {
   const data = [...entries]
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-    .map((e) => ({ date: formatDate(e.date), weight: e.weightLb }));
+    .map((e) => ({ date: formatShortDate(e.date), weight: e.weightLb }));
 
   if (data.length < 2) return null;
 

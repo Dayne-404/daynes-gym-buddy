@@ -39,12 +39,13 @@ export const useDashboardData = (): DashboardData => {
         const sorted = [...weights].sort(
           (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
         );
-        const [latest, previous] = sorted as [Weight?, Weight?];
+        const todayEntry = sorted.find((w) => w.date.startsWith(today)) as Weight | undefined;
+        const previousEntry = sorted.find((w) => w.date.split("T")[0] < today) as Weight | undefined;
 
         setState({
           caloriesConsumed,
-          currentWeight: latest?.weightLb ?? null,
-          previousWeight: previous?.weightLb ?? null,
+          currentWeight: todayEntry?.weightLb ?? previousEntry?.weightLb ?? null,
+          previousWeight: todayEntry ? previousEntry?.weightLb ?? null : null,
           routines,
           loading: false,
           error: null,

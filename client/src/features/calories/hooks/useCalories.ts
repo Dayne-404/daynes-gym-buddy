@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { fetchCaloriesForDate } from "../services/fetchCalories";
 import { logCalorie as logCalorieService } from "../services/logCalorie";
 import { deleteCalorie as deleteCalorieService } from "../services/deleteCalorie";
@@ -19,7 +19,7 @@ export const useCalories = (date: string) => {
     error: null,
   });
 
-  const load = async () => {
+  const load = useCallback(async () => {
     setState((prev) => ({ ...prev, loading: true }));
     try {
       const entries = await fetchCaloriesForDate(date);
@@ -32,11 +32,11 @@ export const useCalories = (date: string) => {
         error: (err as Error).message,
       }));
     }
-  };
+  }, [date]);
 
   useEffect(() => {
     load();
-  }, [date]);
+  }, [load]);
 
   const logCalorie = async (calories: number) => {
     await logCalorieService(calories, date);

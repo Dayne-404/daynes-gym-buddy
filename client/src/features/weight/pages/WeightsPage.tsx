@@ -5,7 +5,6 @@ import { useUser } from "@/features/user";
 import { useWeights } from "../hooks/useWeights";
 import WeightStatsCard from "../components/WeightStatsCard";
 import WeightGraph from "../components/WeightGraph";
-import { ProgressPhoto } from "@/features/dashboard";
 import { localDateString } from "@/utils/date";
 
 const today = localDateString();
@@ -35,7 +34,6 @@ const WeightsPage = () => {
           entries={entries}
           goalWeightLb={user.goalWeightLb ?? null}
         />
-        <ProgressPhoto />
         {(todayEntry || previousEntry) && (
           <WeightStatsCard
             todayEntry={todayEntry}
