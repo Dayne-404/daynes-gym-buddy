@@ -23,7 +23,7 @@ const WeightTrend = ({ current, previous, unit = "lb" }: WeightTrendProps) => {
         <span className="text-small font-medium ml-1">{unit}</span>
       </span>
 
-      {delta !== null && (
+      {delta !== null ? (
         <div
           className="flex items-center gap-0.5 text-xs font-semibold"
           style={{ color: isDown ? "#92a3fd" : isUp ? "#eea4ce" : "#ada4a5" }}
@@ -41,7 +41,7 @@ const WeightTrend = ({ current, previous, unit = "lb" }: WeightTrendProps) => {
           {delta === 0 ? "—" : `${isUp ? "+" : ""}${delta} ${unit}`}
           <span className="text-gray-500 font-normal ml-0.5">today</span>
         </div>
-      )}
+      ) : <span className="text-gray-500 font-semibold text-xs">Keep tracking!</span>}
     </div>
   );
 };

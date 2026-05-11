@@ -1,20 +1,21 @@
 import { Stack } from "@/app/layout";
 import { Button, Input } from "@/components";
 
-interface CalorieLogInputProps {
+interface LogInputProps {
   value: string;
+  placeholder?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onLog: () => void;
 }
 
-const CalorieLogInput = ({ value, onChange, onLog }: CalorieLogInputProps) => {
+const LogInput = ({ value, placeholder = "Enter value", onChange, onLog }: LogInputProps) => {
   return (
     <Stack direction="row" gap={2} center>
       <div className="flex-1">
         <Input
-          name="calories"
+          name="value"
           type="number"
-          placeholder="Enter Calories"
+          placeholder={placeholder}
           value={value}
           onChange={onChange}
         />
@@ -24,4 +25,4 @@ const CalorieLogInput = ({ value, onChange, onLog }: CalorieLogInputProps) => {
   );
 };
 
-export default CalorieLogInput;
+export default LogInput;

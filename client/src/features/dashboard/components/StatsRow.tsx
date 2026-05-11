@@ -16,7 +16,7 @@ const StatsRow = ({ caloriesConsumed, calorieGoal, currentWeight, previousWeight
       <DashboardCard title="Calories" to="/calories" center>
         <CalorieRing current={caloriesConsumed} goal={calorieGoal} />
       </DashboardCard>
-      <DashboardCard title="Weight" to="/weight">
+      <DashboardCard title="Weight" to="/weights">
         {currentWeight === null ? (
           <p className="text-xs text-gray-400 text-center py-2">
             No weight entries yet.{"\n"}Add one to start tracking.

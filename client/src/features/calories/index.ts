@@ -1,7 +1,5 @@
 export { default as CaloriesPage } from "./pages/CaloriesPage";
 
-export { default as CalendarStrip } from "./components/CalendarStrip";
-export { default as CalorieLogInput } from "./components/CalorieLogInput";
 export { default as CalorieLogList } from "./components/CalorieLogList";
 export { default as CalorieProgressBar } from "./components/CalorieProgressBar";
 export type { CalorieEntry } from "./components/CalorieLogList";

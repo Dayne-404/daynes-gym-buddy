@@ -1,14 +1,13 @@
 import { useState } from "react";
 import { Body, PageContainer } from "@/app/layout";
-import { Line, PageHeader } from "@/components";
+import { CalendarStrip, Line, LogInput, PageHeader } from "@/components";
 import { useUser } from "@/features/user";
-import CalendarStrip from "../components/CalendarStrip";
-import CalorieLogInput from "../components/CalorieLogInput";
 import CalorieLogList from "../components/CalorieLogList";
 import CalorieProgressBar from "../components/CalorieProgressBar";
 import { useCalories } from "../hooks/useCalories";
+import { localDateString } from "@/utils/date";
 
-const today = new Date().toISOString().split("T")[0];
+const today = localDateString();
 
 const formatTime = (isoString: string) =>
   new Date(isoString).toLocaleTimeString([], {
@@ -19,7 +18,8 @@ const formatTime = (isoString: string) =>
 const CaloriesPage = () => {
   const { user } = useUser();
   const [selectedDate, setSelectedDate] = useState(today);
-  const { entries, totalCalories, logCalorie, deleteCalorie } = useCalories(selectedDate);
+  const { entries, totalCalories, logCalorie, deleteCalorie } =
+    useCalories(selectedDate);
   const [value, setValue] = useState("");
 
   const handleLog = async () => {
@@ -41,9 +41,12 @@ const CaloriesPage = () => {
           goal={user.dailyCalorieGoal ?? 2000}
         />
         <Line />
-        <CalorieLogInput
+        <LogInput
           value={value}
-          onChange={(e) => setValue(e.target.value)}
+          placeholder="Enter Calories"
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setValue(e.target.value)
+          }
           onLog={handleLog}
         />
         <CalorieLogList

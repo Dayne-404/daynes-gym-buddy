@@ -26,11 +26,17 @@ export const useCalories = (date: string) => {
       const totalCalories = entries.reduce((sum, e) => sum + e.calories, 0);
       setState({ entries, totalCalories, loading: false, error: null });
     } catch (err) {
-      setState((prev) => ({ ...prev, loading: false, error: (err as Error).message }));
+      setState((prev) => ({
+        ...prev,
+        loading: false,
+        error: (err as Error).message,
+      }));
     }
   };
 
-  useEffect(() => { load(); }, [date]);
+  useEffect(() => {
+    load();
+  }, [date]);
 
   const logCalorie = async (calories: number) => {
     await logCalorieService(calories, date);

@@ -58,11 +58,13 @@ model Calorie {
 model Weight {
   id        Int      @id @default(autoincrement())
   userId    Int
-  date      DateTime @default(now())
+  date      DateTime @default(now()) @db.Date
   weightLb  Float
   createdAt DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id])
+
+  @@unique([userId, date])
 }
 
 model RoutineExercise {
