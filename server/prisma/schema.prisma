@@ -30,6 +30,7 @@ model User {
   routines      Routine[]
   weights       Weight[]
   refreshTokens RefreshToken[]
+  exercises     Exercise[]
 }
 
 model Routine {
@@ -82,12 +83,14 @@ model RoutineExercise {
 
 model Exercise {
   id          Int      @id @default(autoincrement())
+  userId      Int?
   name        String
   muscleGroup String
   description String?
   mediaUrl    String?
   createdAt   DateTime @default(now())
 
+  user             User?             @relation(fields: [userId], references: [id])
   routineExercises RoutineExercise[]
 }
 

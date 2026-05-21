@@ -4,6 +4,7 @@ import DashboardPage from "@/features/dashboard/pages/DashboardPage";
 import { CaloriesPage } from "@/features/calories";
 import WeightsPage from "@/features/weight/pages/WeightsPage";
 import { RoutinesPage } from "@/features/routines";
+import { ExercisesPage } from "@/features/exercises";
 
 export const protectedRoutes: RouteObject = {
   element: <ProtectedRoute />,
@@ -12,5 +13,6 @@ export const protectedRoutes: RouteObject = {
     { path: "/calories", element: <CaloriesPage /> },
     { path: "/weights", element: <WeightsPage /> },
     { path: "/routines", element: <RoutinesPage /> },
+    { path: "/exercises", element: <ExercisesPage /> },
   ],
 };

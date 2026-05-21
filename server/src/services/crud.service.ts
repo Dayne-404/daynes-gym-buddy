@@ -4,6 +4,7 @@ import { buildDateFilter } from "../utils/dateFilter";
 import {
   hasDateField,
   PrismaModelName,
+  tracksCreator,
   userOwnedModel,
 } from "../types/prismaModels";
 
@@ -19,10 +20,12 @@ export interface PaginatedResult<T> {
 
 const modelIncludes: Partial<Record<PrismaModelName, any>> = {
   routine: { _count: { select: { routineExercises: true } } },
+  exercise: { user: { select: { firstName: true, lastName: true } } },
 };
 
 const searchFields: Partial<Record<PrismaModelName, string[]>> = {
   routine: ["name"],
+  exercise: ["name", "muscleGroup"],
 };
 
 const defaultOrder: Partial<Record<PrismaModelName, any>> = {
@@ -87,10 +90,14 @@ export const createCrudService = (modelName: PrismaModelName) => {
     return data;
   };
 
+  const isCreatorTracked = tracksCreator.has(modelName);
+
   const create = async (body: any, userId?: number) => {
-    const data = isUserOwned
-      ? { ...sanitizeData(body, modelName), userId }
-      : sanitizeData(body, modelName);
+    const sanitized = sanitizeData(body, modelName);
+    const data =
+      isUserOwned || isCreatorTracked
+        ? { ...sanitized, userId }
+        : sanitized;
 
     return repo.createOne(modelName, data);
   };
