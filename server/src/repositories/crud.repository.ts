@@ -8,9 +8,25 @@ export const getModel = (modelName: PrismaModelName) => {
 export const findMany = async (
   modelName: PrismaModelName,
   where: any,
-  include?: any
+  include?: any,
+  skip?: number,
+  take?: number,
+  orderBy?: any
 ) => {
-  return getModel(modelName).findMany({ where, ...(include && { include }) });
+  return getModel(modelName).findMany({
+    where,
+    ...(include && { include }),
+    ...(skip !== undefined && { skip }),
+    ...(take !== undefined && { take }),
+    ...(orderBy && { orderBy }),
+  });
+};
+
+export const countMany = async (
+  modelName: PrismaModelName,
+  where: any
+) => {
+  return getModel(modelName).count({ where }) as Promise<number>;
 };
 
 export const findUnique = async (modelName: PrismaModelName, where: any) => {

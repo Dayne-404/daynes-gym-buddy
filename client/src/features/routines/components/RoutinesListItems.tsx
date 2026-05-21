@@ -17,7 +17,7 @@ interface RoutinesListItemsProps {
 
 const RoutinesListItems = ({ routines }: RoutinesListItemsProps) => {
   return (
-    <Stack gap={2}>
+    <Stack gap={2} className="pb-4">
       {routines.map((routine) => {
         const iconSrc =
           (routine.icon && iconMap[routine.icon]) ?? weightLiftingIcon;

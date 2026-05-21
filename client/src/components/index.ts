@@ -5,6 +5,7 @@ export { default as Input } from "./Input";
 
 export { default as IconButton } from "./IconButton";
 export { default as Line } from "./Line";
+export { default as Pagination } from "./Pagination";
 export { default as LogInput } from "./LogInput";
 export { default as NavWrapper } from "./NavWrapper";
 export { default as PageHeader } from "./PageHeader";

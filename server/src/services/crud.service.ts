@@ -9,9 +9,27 @@ import {
 
 import * as repo from "../repositories/crud.repository";
 
+export interface PaginatedResult<T> {
+  data: T[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
 const modelIncludes: Partial<Record<PrismaModelName, any>> = {
   routine: { _count: { select: { routineExercises: true } } },
 };
+
+const searchFields: Partial<Record<PrismaModelName, string[]>> = {
+  routine: ["name"],
+};
+
+const defaultOrder: Partial<Record<PrismaModelName, any>> = {
+  routine: { createdAt: "desc" },
+};
+
+const DEFAULT_LIMIT = 5;
 
 const sanitizeData = (data: any, fieldType: PrismaModelName) => {
   const sanitized = { ...data };
@@ -24,20 +42,38 @@ const sanitizeData = (data: any, fieldType: PrismaModelName) => {
 export const createCrudService = (modelName: PrismaModelName) => {
   const isUserOwned = userOwnedModel.has(modelName);
 
-  const getAll = async (userId: number | undefined, query: any) => {
+  const getAll = async (userId: number | undefined, query: any): Promise<PaginatedResult<any>> => {
     const createdAtFilter = buildDateFilter(query, "createdFrom", "createdTo");
 
     const date = hasDateField.has(modelName)
       ? buildDateFilter(query)
       : undefined;
 
+    const fields = searchFields[modelName];
+    const searchTerm = typeof query.search === "string" ? query.search.trim() : undefined;
+    const searchFilter =
+      fields && searchTerm
+        ? { OR: fields.map((f) => ({ [f]: { contains: searchTerm, mode: "insensitive" } })) }
+        : undefined;
+
+    const isPaginated = query.page !== undefined || query.limit !== undefined;
+    const page = Math.max(1, parseInt(query.page) || 1);
+    const limit = Math.min(100, Math.max(1, parseInt(query.limit) || DEFAULT_LIMIT));
+    const skip = (page - 1) * limit;
+
     const where: any = {
       ...(isUserOwned && { userId }),
       ...(createdAtFilter && { createdAt: createdAtFilter }),
       ...(date && { date }),
+      ...(searchFilter && searchFilter),
     };
 
-    return repo.findMany(modelName, where, modelIncludes[modelName]);
+    const [data, total] = await Promise.all([
+      repo.findMany(modelName, where, modelIncludes[modelName], isPaginated ? skip : undefined, isPaginated ? limit : undefined, defaultOrder[modelName]),
+      repo.countMany(modelName, where),
+    ]);
+
+    return { data, total, page, limit, totalPages: isPaginated ? Math.ceil(total / limit) : 1 };
   };
 
   const getById = async (id: number, userId?: number) => {

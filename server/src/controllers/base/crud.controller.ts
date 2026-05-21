@@ -6,8 +6,8 @@ export const createCrudControllers = (modelName: PrismaModelName) => {
   const service = createCrudService(modelName);
 
   const getAll = async (req: Request, res: Response) => {
-    const data = await service.getAll(req.userId, req.query);
-    res.json({ [`${modelName}s`]: data });
+    const { data, total, page, limit, totalPages } = await service.getAll(req.userId, req.query);
+    res.json({ [`${modelName}s`]: data, total, page, limit, totalPages });
   };
 
   const getById = async (req: Request, res: Response) => {

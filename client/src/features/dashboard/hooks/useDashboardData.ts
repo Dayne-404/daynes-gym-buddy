@@ -29,8 +29,8 @@ export const useDashboardData = (): DashboardData => {
   });
 
   useEffect(() => {
-    Promise.all([fetchCaloriesForDate(today), fetchWeights(), fetchRoutines()])
-      .then(([calories, weights, routines]) => {
+    Promise.all([fetchCaloriesForDate(today), fetchWeights(), fetchRoutines({ page: 1, limit: 3 })])
+      .then(([calories, weights, { routines }]) => {
         const caloriesConsumed = calories.reduce(
           (sum: number, e: Calorie) => sum + e.calories,
           0,

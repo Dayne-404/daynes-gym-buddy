@@ -8,7 +8,7 @@ interface PageContainerProps {
 }
 
 const variantStyles: Record<PageVariant, string> = {
-  default: "pt-10 px-8 min-h-screen",
+  default: "pt-10 px-8 min-h-screen flex flex-col",
   centered: "px-8 min-h-screen flex items-center justify-center w-full",
 };
 
