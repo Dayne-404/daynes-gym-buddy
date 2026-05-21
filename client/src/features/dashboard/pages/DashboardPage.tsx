@@ -30,7 +30,7 @@ const DashboardPage = () => {
           />
           <ProgressPhoto />
           <Line />
-          <RoutinesList routines={routines} />
+          <RoutinesList routines={routines} linkToPage />
         </Stack>
       </Body>
     </PageContainer>

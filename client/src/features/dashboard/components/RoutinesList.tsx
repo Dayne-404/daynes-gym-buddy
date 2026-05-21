@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Stack } from "@/app/layout";
 import Card from "@/app/layout/Card";
 import weightLiftingIcon from "@/assets/weight_lifting.svg";
@@ -14,26 +15,37 @@ const iconMap: Record<string, string> = {
 
 interface RoutinesListProps {
   routines: Routine[];
+  linkToPage?: boolean;
 }
 
-const RoutinesList = ({ routines }: RoutinesListProps) => {
+const RoutinesList = ({ routines, linkToPage = false }: RoutinesListProps) => {
   return (
     <Card size="flex">
       <Stack gap={2}>
-        <p className="text-sm font-semibold">Routines</p>
+        <Stack direction="row" spaceBetween>
+          <p className="text-sm font-semibold">Routines</p>
+          {linkToPage && (
+            <Link to="/routines" className="text-xs font-light text-gray-500">
+              See more
+            </Link>
+          )}
+        </Stack>
         {routines.length === 0 ? (
           <p className="text-xs text-gray-400 text-center py-2">
             No routines yet. Create one to get started.
           </p>
         ) : (
           routines.map((routine) => {
-            const iconSrc = (routine.icon && iconMap[routine.icon]) ?? weightLiftingIcon;
+            const iconSrc =
+              (routine.icon && iconMap[routine.icon]) ?? weightLiftingIcon;
             return (
               <RoutineCard
                 key={routine.id}
                 name={routine.name}
                 exerciseAmount={routine._count.routineExercises}
-                icon={<img src={iconSrc} alt={routine.icon ?? "weight_lifting"} />}
+                icon={
+                  <img src={iconSrc} alt={routine.icon ?? "weight_lifting"} />
+                }
               />
             );
           })

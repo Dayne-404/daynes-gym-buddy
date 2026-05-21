@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { fetchCaloriesForDate } from "@/features/calories";
 import type { Calorie } from "@/features/calories";
 import { fetchWeights } from "@/features/weight";
-import { fetchRoutines } from "../services/fetchRoutines";
+import { fetchRoutines } from "../../routines/services/fetchRoutines";
 import type { Routine } from "../types/dashboard.types";
 import type { Weight } from "@/features/weight";
 import { localDateString } from "@/utils/date";
