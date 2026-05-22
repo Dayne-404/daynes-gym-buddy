@@ -7,17 +7,18 @@ import DoubleDots from "@/assets/double_dots.svg";
 interface PageHeaderProps {
   text?: string;
   icon?: ReactNode;
+  onIconClick?: () => void;
   simple?: boolean;
 }
 
-const PageHeader = ({ text, icon, simple = false }: PageHeaderProps) => {
+const PageHeader = ({ text, icon, onIconClick, simple = false }: PageHeaderProps) => {
   const navigate = useNavigate();
 
   return (
     <Stack direction="row" centerY spaceBetween className="pb-8">
       <IconButton icon={<img src={BackArrow} />} onClick={() => navigate(-1)} />
       <h1 className="text-large font-bold">{text}</h1>
-      {!simple && <IconButton icon={icon ?? <img src={DoubleDots} />} />}
+      {!simple && <IconButton icon={icon ?? <img src={DoubleDots} />} onClick={onIconClick} />}
     </Stack>
   );
 };

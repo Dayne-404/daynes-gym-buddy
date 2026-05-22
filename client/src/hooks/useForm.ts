@@ -15,7 +15,7 @@ export function useForm<T extends Record<string, string>>(
   );
   const [touched, setTouched] = useState<Set<string>>(new Set());
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setValues((prev) => ({ ...prev, [name]: value }));
     setTouched((prev) => {

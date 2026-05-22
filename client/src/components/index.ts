@@ -9,3 +9,4 @@ export { default as Pagination } from "./Pagination";
 export { default as LogInput } from "./LogInput";
 export { default as NavWrapper } from "./NavWrapper";
 export { default as PageHeader } from "./PageHeader";
+export { default as Textarea } from "./Textarea";

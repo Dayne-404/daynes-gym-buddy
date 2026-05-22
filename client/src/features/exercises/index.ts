@@ -1,5 +1,6 @@
 export { default as ExercisesPage } from "./pages/ExercisesPage";
 export { default as ExercisePage } from "./pages/ExercisePage";
+export { default as CreateExercisePage } from "./pages/CreateExercisePage";
 
 export { useExercises } from "./hooks/useExercises";
 

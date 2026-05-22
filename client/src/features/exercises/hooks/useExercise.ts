@@ -2,25 +2,18 @@ import { useEffect, useState } from "react";
 import { fetchExercise } from "../services/fetchExercise";
 import type { Exercise } from "../types/exercise.types";
 
-interface ExerciseState {
-  exercise: Exercise | null;
-  loading: boolean;
-  error: string | null;
-}
-
 export const useExercise = (id: number) => {
-  const [state, setState] = useState<ExerciseState>({
-    exercise: null,
-    loading: true,
-    error: null,
-  });
+  const [exercise, setExercise] = useState<Exercise | null>(null);
+  const [loadedId, setLoadedId] = useState<number | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    setState({ exercise: null, loading: true, error: null });
+    let active = true;
     fetchExercise(id)
-      .then((exercise) => setState({ exercise, loading: false, error: null }))
-      .catch((err) => setState({ exercise: null, loading: false, error: (err as Error).message }));
+      .then((data) => { if (active) { setExercise(data); setLoadedId(id); setError(null); } })
+      .catch((err) => { if (active) { setError((err as Error).message); setLoadedId(id); } });
+    return () => { active = false; };
   }, [id]);
 
-  return state;
+  return { exercise, loading: loadedId !== id, error };
 };

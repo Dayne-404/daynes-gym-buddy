@@ -18,8 +18,8 @@ const ExerciseList = ({ exercises, loading, search, page, totalPages, onPrev, on
   const navigate = useNavigate();
 
   return (
-  <Card size="flex" className="flex flex-col overflow-hidden">
-    <div className="flex-1 overflow-y-auto">
+  <Card size="flex" className="flex flex-col mb-10">
+    <div className="flex-1">
       <Stack gap={2}>
         {exercises.length > 0 ? (
           exercises.map((exercise) => (
