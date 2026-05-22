@@ -29,8 +29,8 @@ export const countMany = async (
   return getModel(modelName).count({ where }) as Promise<number>;
 };
 
-export const findUnique = async (modelName: PrismaModelName, where: any) => {
-  return getModel(modelName).findUnique({ where });
+export const findUnique = async (modelName: PrismaModelName, where: any, include?: any) => {
+  return getModel(modelName).findUnique({ where, ...(include && { include }) });
 };
 
 export const findFirst = async (modelName: PrismaModelName, where: any) => {

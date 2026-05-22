@@ -7,11 +7,12 @@ interface ExerciseCardProps {
     muscleGroup: string;
     icon?: ReactNode;
     createdBy?: string;
+    onClick?: () => void;
 }
 
-const ExerciseCard = ({ name, muscleGroup, icon, createdBy }: ExerciseCardProps) => {
+const ExerciseCard = ({ name, muscleGroup, icon, createdBy, onClick }: ExerciseCardProps) => {
   return (
-    <Card className="h-full w-full">
+    <Card className="h-full w-full" onClick={onClick}>
         <Stack gap={2} direction="row" centerY>
             {icon ?? <img src={exerciseIcon} alt="exercise" />}
             <Stack gap={0}>

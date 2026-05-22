@@ -7,6 +7,7 @@ interface CardProps {
   size?: "sm" | "md" | "lg" | "flex";
   variant?: CardVariant;
   className?: string;
+  onClick?: () => void;
 }
 
 const sizeClasses = {
@@ -23,9 +24,12 @@ const variantClasses: Record<CardVariant, string> = {
   "gradient-secondary": "bg-gradient-secondary",
 };
 
-const Card = ({ children, size = "md", variant = "default", className = "" }: CardProps) => {
+const Card = ({ children, size = "md", variant = "default", className = "", onClick }: CardProps) => {
   return (
-    <div className={`shadow-primary rounded-xl p-4 ${sizeClasses[size]} ${variantClasses[variant]} ${className}`}>
+    <div
+      className={`shadow-primary rounded-xl p-4 ${sizeClasses[size]} ${variantClasses[variant]} ${className}${onClick ? " cursor-pointer" : ""}`}
+      onClick={onClick}
+    >
       {children}
     </div>
   );

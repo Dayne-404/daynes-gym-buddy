@@ -84,7 +84,7 @@ export const createCrudService = (modelName: PrismaModelName) => {
 
     const where = isUserOwned ? { id, userId } : { id };
 
-    const data = await repo.findUnique(modelName, where);
+    const data = await repo.findUnique(modelName, where, modelIncludes[modelName]);
     if (!data) throw ApiError.notFound(modelName);
 
     return data;

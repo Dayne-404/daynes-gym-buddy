@@ -17,6 +17,7 @@ const gapMap: Record<number, string> = {
   3: "gap-3",
   4: "gap-4",
   6: "gap-6",
+  7: "gap-7",
   8: "gap-8",
 };
 
