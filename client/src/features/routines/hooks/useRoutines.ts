@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { fetchRoutines } from "../services/fetchRoutines";
-import type { Routine } from "../../dashboard/types/dashboard.types";
+import type { Routine } from "../types/routine.types";
 
 const DEBOUNCE_MS = 300;
 

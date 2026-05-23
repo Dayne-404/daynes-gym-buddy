@@ -1,5 +1,5 @@
 import { apiRequest } from "@/services/ApiClient";
-import type { Routine } from "../../dashboard/types/dashboard.types";
+import type { Routine } from "../types/routine.types";
 
 export interface PaginatedRoutines {
   routines: Routine[];

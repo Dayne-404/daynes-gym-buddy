@@ -4,8 +4,8 @@ import Card from "@/app/layout/Card";
 import weightLiftingIcon from "@/assets/weight_lifting.svg";
 import abWorkoutIcon from "@/assets/ab_workout.svg";
 import jumpRopeIcon from "@/assets/jump_rope.svg";
-import type { Routine } from "../types/dashboard.types";
-import RoutineCard from "./RoutineCard";
+import type { Routine } from "@/features/routines/types/routine.types";
+import RoutineCard from "@/features/routines/components/RoutineCard";
 
 const iconMap: Record<string, string> = {
   weight_lifting: weightLiftingIcon,
