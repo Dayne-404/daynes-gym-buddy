@@ -20,7 +20,11 @@ const ExercisesPage = () => {
 
   return (
     <PageContainer>
-      <PageHeader text="Exercises" icon={<Plus set="light" />} onIconClick={() => navigate("/exercises/create")} />
+      <PageHeader
+        text="Exercises"
+        icon={<Plus set="light" />}
+        onIconClick={() => navigate("/exercises/create")}
+      />
       <Stack gap={2}>
         <p className="text-xs text-gray-400 text-center">
           {overallTotal} {overallTotal === 1 ? "Exercise" : "Exercises"}
