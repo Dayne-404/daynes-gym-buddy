@@ -5,9 +5,10 @@ interface FormInputProps {
   icon?: FC<IconProps>;
   endIcon?: FC<IconProps>;
   onEndIconClick?: () => void;
+  label?: string;
   name: string;
   type?: string;
-  placeholder: string;
+  placeholder?: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   disabled?: boolean;
@@ -18,9 +19,10 @@ const Input = ({
   icon: Icon,
   endIcon: EndIcon,
   onEndIconClick,
+  label,
   name,
   type = "text",
-  placeholder,
+  placeholder = "",
   value,
   onChange,
   disabled = false,
@@ -35,6 +37,9 @@ const Input = ({
   return (
     <div>
       <div className={containerStyle}>
+        {label && (
+          <span className="pr-3 text-sm text-gray-400 whitespace-nowrap">{label}</span>
+        )}
         {Icon && (
           <span className={`pr-4 ${iconStyle}`}>
             <Icon set="light" primaryColor="currentColor" size={20} />

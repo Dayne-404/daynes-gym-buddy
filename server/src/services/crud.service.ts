@@ -36,6 +36,10 @@ const defaultOrder: Partial<Record<PrismaModelName, any>> = {
   routine: { createdAt: "desc" },
 };
 
+const nestedArrayFields: Partial<Record<PrismaModelName, string[]>> = {
+  routine: ["routineExercises"],
+};
+
 const DEFAULT_LIMIT = 5;
 
 const sanitizeData = (data: any, fieldType: PrismaModelName) => {
@@ -98,6 +102,13 @@ export const createCrudService = (modelName: PrismaModelName) => {
 
   const create = async (body: any, userId?: number) => {
     const sanitized = sanitizeData(body, modelName);
+
+    for (const field of nestedArrayFields[modelName] ?? []) {
+      if (Array.isArray(sanitized[field])) {
+        sanitized[field] = { create: sanitized[field] };
+      }
+    }
+
     const data =
       isUserOwned || isCreatorTracked
         ? { ...sanitized, userId }
