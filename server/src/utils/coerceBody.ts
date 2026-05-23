@@ -23,6 +23,7 @@ export const modelCoercionMap: ModelCoercionMap = {
     sets: "number",
     reps: "number",
     restTimeSeconds: "number",
+    targetWeightLb: "number",
   },
   user: {
     goalWeightLb: "number", //TODO: should this be a float?

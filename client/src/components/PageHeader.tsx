@@ -9,13 +9,15 @@ interface PageHeaderProps {
   icon?: ReactNode;
   onIconClick?: () => void;
   simple?: boolean;
+  noPadding?: boolean;
 }
 
-const PageHeader = ({ text, icon, onIconClick, simple = false }: PageHeaderProps) => {
+const PageHeader = ({ text, icon, onIconClick, simple = false, noPadding = false }: PageHeaderProps) => {
   const navigate = useNavigate();
+  const paddingClass = noPadding ? "pb-0" : "pb-8";
 
   return (
-    <Stack direction="row" centerY spaceBetween className="pb-8">
+    <Stack direction="row" centerY spaceBetween className={`${paddingClass}`}>
       <IconButton icon={<img src={BackArrow} />} onClick={() => navigate(-1)} />
       <h1 className="text-large font-bold">{text}</h1>
       {!simple && <IconButton icon={icon ?? <img src={DoubleDots} />} onClick={onIconClick} />}

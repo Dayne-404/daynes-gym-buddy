@@ -23,6 +23,10 @@ const modelIncludes: Partial<Record<PrismaModelName, any>> = {
   exercise: { user: { select: { firstName: true, lastName: true } } },
 };
 
+const detailIncludes: Partial<Record<PrismaModelName, any>> = {
+  routine: { routineExercises: { include: { exercise: true }, orderBy: { orderIndex: "asc" } } },
+};
+
 const searchFields: Partial<Record<PrismaModelName, string[]>> = {
   routine: ["name"],
   exercise: ["name", "muscleGroup"],
@@ -84,7 +88,7 @@ export const createCrudService = (modelName: PrismaModelName) => {
 
     const where = isUserOwned ? { id, userId } : { id };
 
-    const data = await repo.findUnique(modelName, where, modelIncludes[modelName]);
+    const data = await repo.findUnique(modelName, where, detailIncludes[modelName] ?? modelIncludes[modelName]);
     if (!data) throw ApiError.notFound(modelName);
 
     return data;

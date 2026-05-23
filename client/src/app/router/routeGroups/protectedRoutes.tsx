@@ -3,8 +3,12 @@ import { ProtectedRoute } from "../routeGuards/ProtectedRoute";
 import DashboardPage from "@/features/dashboard/pages/DashboardPage";
 import { CaloriesPage } from "@/features/calories";
 import WeightsPage from "@/features/weight/pages/WeightsPage";
-import { RoutinesPage } from "@/features/routines";
-import { ExercisesPage, ExercisePage, CreateExercisePage } from "@/features/exercises";
+import { RoutinePage, RoutinesPage } from "@/features/routines";
+import {
+  ExercisesPage,
+  ExercisePage,
+  CreateExercisePage,
+} from "@/features/exercises";
 
 export const protectedRoutes: RouteObject = {
   element: <ProtectedRoute />,
@@ -16,5 +20,6 @@ export const protectedRoutes: RouteObject = {
     { path: "/exercises", element: <ExercisesPage /> },
     { path: "/exercises/create", element: <CreateExercisePage /> },
     { path: "/exercises/:id", element: <ExercisePage /> },
+    { path: "/routines/:id", element: <RoutinePage /> },
   ],
 };
