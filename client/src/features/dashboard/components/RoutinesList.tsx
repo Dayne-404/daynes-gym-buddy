@@ -41,6 +41,7 @@ const RoutinesList = ({ routines, linkToPage = false }: RoutinesListProps) => {
             return (
               <RoutineCard
                 key={routine.id}
+                routineId={routine.id}
                 name={routine.name}
                 exerciseAmount={routine._count.routineExercises}
                 icon={

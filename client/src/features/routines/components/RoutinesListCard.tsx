@@ -1,6 +1,6 @@
 import Card from "@/app/layout/Card";
 import { Pagination } from "@/components";
-import type { Routine } from "../../dashboard/types/dashboard.types";
+import type { Routine } from "../types/routine.types";
 import RoutinesListItems from "./RoutinesListItems";
 
 interface RoutinesListCardProps {

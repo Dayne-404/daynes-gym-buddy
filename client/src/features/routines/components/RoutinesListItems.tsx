@@ -24,6 +24,8 @@ const RoutinesListItems = ({ routines }: RoutinesListItemsProps) => {
         return (
           <RoutineCard
             key={routine.id}
+            routineId={routine.id}
+            navMode
             name={routine.name}
             exerciseAmount={routine._count.routineExercises}
             icon={<img src={iconSrc} alt={routine.icon ?? "weight_lifting"} />}
