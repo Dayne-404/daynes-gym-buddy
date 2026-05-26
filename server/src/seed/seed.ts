@@ -1,5 +1,5 @@
 import { create } from "node:domain";
-import { PrismaClient } from "../generated/prisma";
+import { PrismaClient } from "@prisma/client";
 import argon2 from "argon2";
 
 const prisma = new PrismaClient();

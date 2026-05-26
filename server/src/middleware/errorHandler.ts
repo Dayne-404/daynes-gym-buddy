@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import ApiError from "../utils/ApiError";
 import { env } from "../config/env";
-import { Prisma } from "../generated/prisma";
+import { Prisma } from "@prisma/client";
 
 /**
  * Convert known Prisma errors into clean API errors
