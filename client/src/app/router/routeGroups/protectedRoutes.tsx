@@ -1,15 +1,16 @@
+import { lazy } from "react";
 import { type RouteObject } from "react-router-dom";
 import { ProtectedRoute } from "../routeGuards/ProtectedRoute";
-import DashboardPage from "@/features/dashboard/pages/DashboardPage";
-import { CaloriesPage } from "@/features/calories";
-import WeightsPage from "@/features/weight/pages/WeightsPage";
-import { CreateRoutinePage, RoutinePage, RoutinesPage } from "@/features/routines";
-import {
-  ExercisesPage,
-  ExercisePage,
-  CreateExercisePage,
-} from "@/features/exercises";
 
+const DashboardPage = lazy(() => import("@/features/dashboard/pages/DashboardPage"));
+const CaloriesPage = lazy(() => import("@/features/calories/pages/CaloriesPage"));
+const WeightsPage = lazy(() => import("@/features/weight/pages/WeightsPage"));
+const RoutinesPage = lazy(() => import("@/features/routines/pages/RoutinesPage"));
+const RoutinePage = lazy(() => import("@/features/routines/pages/RoutinePage"));
+const CreateRoutinePage = lazy(() => import("@/features/routines/pages/CreateRoutinePage"));
+const ExercisesPage = lazy(() => import("@/features/exercises/pages/ExercisesPage"));
+const ExercisePage = lazy(() => import("@/features/exercises/pages/ExercisePage"));
+const CreateExercisePage = lazy(() => import("@/features/exercises/pages/CreateExercisePage"));
 
 export const protectedRoutes: RouteObject = {
   element: <ProtectedRoute />,

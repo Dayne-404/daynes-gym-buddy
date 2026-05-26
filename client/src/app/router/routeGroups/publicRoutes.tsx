@@ -1,6 +1,9 @@
+import { lazy } from "react";
 import { type RouteObject } from "react-router-dom";
 import { PublicOnlyRoute } from "../routeGuards/PublicRoute";
-import { LoginPage, RegisterPage } from "@/features/auth";
+
+const LoginPage = lazy(() => import("@/features/auth/pages/LoginPage"));
+const RegisterPage = lazy(() => import("@/features/auth/pages/RegisterPage"));
 
 export const publicRoutes: RouteObject = {
   element: <PublicOnlyRoute />,

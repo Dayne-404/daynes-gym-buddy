@@ -48,7 +48,7 @@ export const generateRefreshToken = async (
     data: {
       userId,
       tokenHash: hashedToken,
-      expiresAt: new Date(Date.now() + env.refreshTokenExpiresDays * 86400000),
+      expiresAt: new Date(Date.now() + env.refreshTokenExpiresDays * 24 * 60 * 60 * 1000),
     },
   });
 

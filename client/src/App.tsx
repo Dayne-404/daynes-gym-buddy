@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { UserProvider } from "@/features/user";
 import { AuthProvider } from "@/features/auth";
 import { RouterProvider } from "react-router-dom";
@@ -7,7 +8,9 @@ export default function App() {
   return (
     <UserProvider>
       <AuthProvider>
-        <RouterProvider router={router} />
+        <Suspense>
+          <RouterProvider router={router} />
+        </Suspense>
       </AuthProvider>
     </UserProvider>
   );
