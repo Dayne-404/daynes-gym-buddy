@@ -2,6 +2,8 @@
 
 ![Gif of gameplay](./preview.gif)
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/043b3085-eca7-4cb2-8c4e-8a96f8b4f494/deploy-status)](https://app.netlify.com/projects/daynes-gym-buddy/deploys)
+
 **Daynes Gym Buddy is a PWA web app designed to track weight and calories while also acting as a way for users to store exercises and build their own workout routines.**
 
 ---
