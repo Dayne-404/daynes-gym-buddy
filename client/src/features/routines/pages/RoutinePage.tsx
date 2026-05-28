@@ -12,7 +12,7 @@ const RoutinePage = () => {
   if (loading || !routine) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-brand flex flex-col">
+    <div className="min-h-screen max-w-4xl mx-auto bg-gradient-brand flex flex-col">
       <RoutineHero />
       <div className="bg-primary-foreground rounded-t-4xl flex-1 pt-10 px-8">
         <Stack gap={4}>
