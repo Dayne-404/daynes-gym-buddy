@@ -11,7 +11,7 @@ interface LogInputProps {
 const LogInput = ({ value, placeholder = "Enter value", onChange, onLog }: LogInputProps) => {
   return (
     <Stack direction="row" gap={2} center>
-      <div className="flex-1">
+      <div className="flex-1" onKeyDown={(e) => e.key === "Enter" && onLog()}>
         <Input
           name="value"
           type="number"
