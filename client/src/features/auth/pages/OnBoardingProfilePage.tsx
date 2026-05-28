@@ -33,7 +33,7 @@ const formFields: {
   { name: "dob", placeholder: "Date of Birth", type: "text", icon: Calendar },
   {
     name: "weight",
-    placeholder: "Your Weight (lb)",
+    placeholder: "Your Goal Weight (lb)",
     type: "text",
     icon: PaperPlus,
   },

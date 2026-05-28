@@ -55,6 +55,7 @@ const Button = ({
         active:scale-[0.98]
         focus:outline-none
         focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/30
+        disabled:bg-gray-300 disabled:bg-none disabled:text-gray-500 disabled:cursor-not-allowed disabled:pointer-events-none disabled:shadow-none
         ${className}
       `}
     >

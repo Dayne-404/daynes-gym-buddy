@@ -8,7 +8,7 @@ interface PageContainerProps {
 }
 
 const variantStyles: Record<PageVariant, string> = {
-  default: "py-10 px-8 min-h-screen flex flex-col",
+  default: "py-10 px-8 min-h-screen max-w-4xl mx-auto flex flex-col",
   centered: "px-8 min-h-screen flex items-center justify-center w-full",
 };
 

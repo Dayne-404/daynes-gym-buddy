@@ -31,6 +31,6 @@ export const env = Object.freeze({
   /** Cookie Configuration */
   cookies: {
     secure: process.env.NODE_ENV === "production",
-    sameSite: "strict" as const,
+    sameSite: (process.env.NODE_ENV === "production" ? "none" : "strict") as "none" | "strict",
   },
 });

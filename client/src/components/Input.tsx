@@ -28,11 +28,11 @@ const Input = ({
   disabled = false,
   errorText,
 }: FormInputProps) => {
-  const containerStyle = `flex items-center w-full h-12 rounded-2xl px-4 bg-border border transition-all duration-200 focus-within:ring-2 focus-within:ring-primary ${errorText ? "border-red-500 focus-within:ring-red-500" : "border-transparent"}`;
+  const containerStyle = `flex items-center w-full h-12 rounded-2xl px-4 border transition-all duration-200 ${disabled ? "bg-gray-300 border-transparent cursor-not-allowed opacity-60" : `bg-border focus-within:ring-2 focus-within:ring-primary ${errorText ? "border-red-500 focus-within:ring-red-500" : "border-transparent"}`}`;
 
-  const iconStyle = errorText ? "text-red-500" : "text-gray-100";
-  const inputStyle = `w-full h-full bg-transparent outline-none ${errorText ? "placeholder-red-500" : ""}`;
-  const endIconStyle = errorText ? "text-red-500" : "text-gray-100";
+  const iconStyle = disabled ? "text-gray-400" : errorText ? "text-red-500" : "text-gray-100";
+  const inputStyle = `w-full h-full bg-transparent outline-none cursor-inherit ${disabled ? "text-gray-500 placeholder-gray-400 cursor-not-allowed" : errorText ? "placeholder-red-500" : ""}`;
+  const endIconStyle = disabled ? "text-gray-400" : errorText ? "text-red-500" : "text-gray-100";
 
   return (
     <div>

@@ -1,10 +1,14 @@
+import { lazy } from "react";
 import { createBrowserRouter } from "react-router-dom";
 import { publicRoutes } from "./routeGroups/publicRoutes";
 import { protectedRoutes } from "./routeGroups/protectedRoutes";
 import { onBoardingRoutes } from "./routeGroups/onBoardingRoutes";
 
+const NotFoundPage = lazy(() => import("@/app/pages/NotFoundPage"));
+
 export const router = createBrowserRouter([
     publicRoutes,
     protectedRoutes,
-    onBoardingRoutes
+    onBoardingRoutes,
+    { path: "*", element: <NotFoundPage /> },
 ])
