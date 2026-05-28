@@ -1,5 +1,4 @@
 import { Stack } from "@/app/layout";
-import { Button } from "@/components";
 import { Avatar, type User } from "@/features/user";
 
 interface ProfileHeaderProps {
@@ -8,14 +7,14 @@ interface ProfileHeaderProps {
 
 const ProfileHeader = ({ user }: ProfileHeaderProps) => {
   return (
-    <Stack direction="row" className="w-full" centerY spaceBetween gap={7}>
-      <Stack direction="row" gap={2} center>
+    
+      <Stack direction="row" gap={2} centerY>
         <Avatar size={45} user={user} />
         <div>
           <p className="font-medium">
             {user.firstName} {user.lastName}
           </p>
-          <p className="text-sm text-gray-700">
+          <p className="text-sm text-gray-100">
             Member since{" "}
             {new Date(user.createdAt).toLocaleDateString("en-US", {
               month: "long",
@@ -24,8 +23,7 @@ const ProfileHeader = ({ user }: ProfileHeaderProps) => {
           </p>
         </div>
       </Stack>
-      <Button size="xsm" text="Edit" />
-    </Stack>
+    
   );
 };
 
