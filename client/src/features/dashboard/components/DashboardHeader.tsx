@@ -1,6 +1,7 @@
 import { Stack } from "@/app/layout";
 import { IconButton } from "@/components";
 import { Notification, Setting } from "react-iconly";
+import { useNavigate } from "react-router-dom";
 
 interface DashboardHeaderProps {
   userFirstName?: string;
@@ -11,6 +12,8 @@ const DashboardHeader = ({
   userFirstName,
   userLastName,
 }: DashboardHeaderProps) => {
+  const navigate = useNavigate();
+
   return (
     <Stack direction="row" centerY spaceBetween>
       <Stack gap={2}>
@@ -20,8 +23,8 @@ const DashboardHeader = ({
         </h4>
       </Stack>
       <Stack direction="row" gap={2}>
-        <IconButton icon={<Setting size="small" />} />
-        <IconButton icon={<Notification size="small" />} />
+        <IconButton icon={<Setting size="small" />} onClick={() => navigate("/settings")} />
+        <IconButton icon={<Notification size="small" />} onClick={() => navigate("/notifications")} />
       </Stack>
     </Stack>
   );

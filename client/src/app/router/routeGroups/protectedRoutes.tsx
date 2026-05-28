@@ -11,6 +11,7 @@ const CreateRoutinePage = lazy(() => import("@/features/routines/pages/CreateRou
 const ExercisesPage = lazy(() => import("@/features/exercises/pages/ExercisesPage"));
 const ExercisePage = lazy(() => import("@/features/exercises/pages/ExercisePage"));
 const CreateExercisePage = lazy(() => import("@/features/exercises/pages/CreateExercisePage"));
+const SettingsPage = lazy(() => import("@/features/settings/pages/SettingsPage"));
 
 export const protectedRoutes: RouteObject = {
   element: <ProtectedRoute />,
@@ -24,5 +25,6 @@ export const protectedRoutes: RouteObject = {
     { path: "/exercises/:id", element: <ExercisePage /> },
     { path: "/routines/:id", element: <RoutinePage /> },
     { path: "/routines/create", element: <CreateRoutinePage /> },
+    { path: "/settings", element: <SettingsPage /> },
   ],
 };

@@ -7,4 +7,5 @@ export interface User {
   goalWeightLb: number | null;
   dailyCalorieGoal: number | null;
   profileComplete: boolean;
+  createdAt: string;
 }

@@ -1,4 +1,4 @@
-type ButtonSize = "sm" | "md" | "lg" | "full";
+type ButtonSize = "xsm" |"sm" | "md" | "lg" | "full";
 type ButtonVariant =
   | "gradient-brand"
   | "gradient-secondary"
@@ -16,6 +16,7 @@ interface ButtonProps {
 }
 
 const sizeClasses: Record<ButtonSize, string> = {
+  xsm: "w-20 h-7 text-xs",
   sm: "w-28 h-9 text-xs",
   md: "w-40 h-12",
   lg: "w-56 h-15",

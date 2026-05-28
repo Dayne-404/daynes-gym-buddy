@@ -9,6 +9,7 @@ export interface PublicUser {
   goalWeightLb?: number;
   dailyCalorieGoal?: number;
   profileComplete: boolean;
+  createdAt: Date;
 }
 
 export const toPublicUser = (user: any): PublicUser => {
@@ -20,7 +21,8 @@ export const toPublicUser = (user: any): PublicUser => {
     avatarColor: user.avatarColor,
     dailyCalorieGoal: user.dailyCalorieGoal,
     goalWeightLb: user.goalWeightLb,
-    profileComplete: checkProfileComplete(user)
+    profileComplete: checkProfileComplete(user),
+    createdAt: user.createdAt,
   };
 };
 
