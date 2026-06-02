@@ -5,7 +5,7 @@ interface ApiErrorResponse {
   errors?: Record<string, string>;
 }
 
-const API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL ?? "/api";
 
 interface ApiRequestOptions {
   endpoint: string;
