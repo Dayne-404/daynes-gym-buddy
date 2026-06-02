@@ -1,7 +1,6 @@
 import {
   useCallback,
   useEffect,
-  useLayoutEffect,
   useRef,
   useState,
   type ReactNode,
@@ -93,7 +92,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     clearAuthState();
   }, [clearAuthState]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (hasTriedRefresh.current) return;
     hasTriedRefresh.current = true;
 
